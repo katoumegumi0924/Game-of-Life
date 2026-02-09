@@ -1,0 +1,92 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSInitRandom
+#pragma kernel CSUpdate
+#pragma kernel CSClear
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+
+// 上一帧画面
+Texture2D<float4> InputTex;
+// 当前帧画面
+RWTexture2D<float4> OutputTex;
+
+// 随机数种子
+float seed;
+// 分辨率
+uint2 resolution;
+
+// 迭代规则
+int birthMask;
+int survivalMask;
+
+float random(float2 uv)
+{
+    return frac(sin(dot(uv, float2(12.9898, 78.233))) * 43758.5453123 + seed);
+
+}
+
+[numthreads(8,8,1)]
+void CSInitRandom(uint3 id : SV_DispatchThreadID)
+{
+    float r = random(float2(id.x, id.y));
+    
+    float val = step(0.5, r);
+
+    OutputTex[id.xy] = float4(val, val, val, 1.0);
+}
+
+[numthreads(8,8,1)]
+void CSUpdate(uint3 id : SV_DispatchThreadID)
+{
+    uint2 centerPos = int2(id.xy);
+    uint aliveNeighbors = 0;
+    // 遍历周围3x3区域，计算存活邻居数量
+    for (int x = -1; x <= 1; ++x)
+    {
+        for (int y = -1; y <= 1; ++y)
+        {
+            if (x == 0 && y == 0)
+                continue;
+            
+            uint2 neighborPos = centerPos + int2(x, y);
+
+            // 循环处理边界
+            neighborPos = (neighborPos + resolution) % resolution;
+
+            if (InputTex[neighborPos].r < 0.5)
+            {
+                aliveNeighbors++;
+            }
+        }
+    }
+
+    // 当前细胞是否存活
+    bool isAlive = InputTex[centerPos].r < 0.5;
+    
+    float nextState = 1.0;
+    if (isAlive)
+    {
+        // 存活
+        if ((survivalMask >> aliveNeighbors) & 1)
+        {
+            nextState = 0.0;
+        }
+    }
+    else
+    {
+        // 繁殖
+        if ((birthMask >> aliveNeighbors) & 1)
+        {
+            nextState = 0.0;
+        }
+    }
+    
+    OutputTex[centerPos] = float4(nextState, nextState, nextState, 1.0);
+}
+
+[numthreads(8, 8, 1)]
+void CSClear(uint3 id : SV_DispatchThreadID)
+{
+    OutputTex[id.xy] = float4(1, 1, 1, 1);
+}

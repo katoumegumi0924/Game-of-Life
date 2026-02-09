@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94a535de443fdd9468f2931d24e204bd, type: 3}
+  m_Name: Maze
+  m_EditorClassIdentifier: 
+  ruleName: Maze
+  Description: "B3/S12345\n\u89C4\u5219\u4E3A\uFF1A\u7EC6\u80DE\u62E5\u6709\u76F8\u90BB\u5B58\u6D3B\u7EC6\u80DE\u6570\u91CF\u81F3\u5C11\u4E3A1\u4E14\u81F3\u591A\u4E3A5\u65F6\u5B58\u6D3B\u81F3\u4E0B\u4E00\u4EE3\uFF0C\u6B7B\u7EC6\u80DE\u5728\u62E5\u67093\u4E2A\u76F8\u90BB\u5B58\u6D3B\u7EC6\u80DE\u65F6\u91CD\u751F\u4E3A\u65B0\u7EC6\u80DE\u3002"
+  birth: 000000010000000000
+  survival: 000101010101000000
