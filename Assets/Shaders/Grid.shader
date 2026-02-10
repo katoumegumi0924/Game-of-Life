@@ -4,7 +4,8 @@ Shader "GOL/Grid"
     {
         _MainTex ("Texture", 2D) = "white" {}
         _GridColor ("Grid Color", Color) = (0.5, 0.5, 0.5, 0.5)
-        _Resolution ("Resolution", Float) = 512
+        _ResolutionX ("ResolutionX", Float) = 512
+        _ResolutionY ("ResolutionY", Float) = 512
         _Thickness ("Thickness", Range(0, 10)) = 5.0
         [Toogle] _ShowGrid ("ShowGrid", Float) = 0
     }
@@ -39,7 +40,8 @@ Shader "GOL/Grid"
             float4 _MainTex_ST;
 
             float4 _GridColor;
-            float _Resolution;
+            float _ResolutionX;
+            float _ResolutionY;
             float _Thickness;
             float _ShowGrid;
 
@@ -57,8 +59,9 @@ Shader "GOL/Grid"
 
                 if (_ShowGrid < 0.5)
                     return cellColor;
+                
+                float2 gridUV = i.uv * float2(_ResolutionX, _ResolutionY);
 
-                float2 gridUV = i.uv * _Resolution;
                 // 一个屏幕像素对应的gridUV
                 float2 pixelSize = fwidth(gridUV);
                 // 计算到grid边界的gridUV距离

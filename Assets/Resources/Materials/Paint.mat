@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Paint
+  m_Name: paint
   m_Shader: {fileID: 4800000, guid: 1c12efc272117d0439ab2c4db5ba9223, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0

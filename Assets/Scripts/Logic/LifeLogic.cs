@@ -15,7 +15,7 @@ public class LifeLogic
     public void Init(GameData data)
     {
         gameData = data;
-        lifeShader = data.lifeData.shader;
+        lifeShader = data.lifeData.lifeShader;
         updateKernel = lifeShader.FindKernel("CSUpdate");
 
         UIRoot.instance.iterationRulesPanel.OnRuleSelected += OnSelectLifeRule;

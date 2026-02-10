@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 821c3101f184f6849be4f1f83f54199d, type: 3}
   m_Name: GPUConfig
   m_EditorClassIdentifier: 
-  gameOfLifeShader: {fileID: 7200000, guid: f64efacbcfcaf0b458ffbfa79402e8d4, type: 3}
+  lifeShader: {fileID: 7200000, guid: f64efacbcfcaf0b458ffbfa79402e8d4, type: 3}

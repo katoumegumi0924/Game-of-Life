@@ -11,6 +11,8 @@ public class LifeRenderer
 
     private Material paintMaterial;
 
+    private Vector2 _lastFrameUV;
+
     public void Init(GameData _gameData, GameLogic _gameLogic)
     {
         gameData = _gameData;
@@ -18,7 +20,8 @@ public class LifeRenderer
 
         displayImage = gameData.lifeData.displayImage;
         gridMaterial = displayImage.material;
-        gridMaterial.SetFloat("_Resolution", Configs.gameOfLifeConfig.resolutionX);
+        gridMaterial.SetFloat("_ResolutionX", Configs.gameOfLifeConfig.resolutionX);
+        gridMaterial.SetFloat("_ResolutionY", Configs.gameOfLifeConfig.resolutionY);
         paintMaterial = Material.Instantiate(Configs.gameResourcesConfig.paint);
 
         UIRoot.instance.settingPanel.OnGridToggle += OnGridShow;
@@ -41,12 +44,7 @@ public class LifeRenderer
     {
         displayImage.texture = gameData.lifeData.currentTex;
 
-        // 只有uv坐标有效时才进行绘制
-        Vector2 taregtUV = gameLogic.playerController.cellUV;
-        if (!float.IsNegativeInfinity(taregtUV.x))
-        {
-            PaintCell(gameLogic.playerController.cellUV, gameLogic.playerController.cellValue, gameLogic.playerController.brushSize);
-        }
+        Paint();
     }
 
     public void OnGridShow(bool showGrid)
@@ -72,19 +70,49 @@ public class LifeRenderer
         RenderTexture.ReleaseTemporary(temp);
     }
 
-    //private void Paint()
-    //{
-    //    Vector2 _lastFrameUV = Vector2.negativeInfinity;
+    private void PaintLine(Vector2 start, Vector2 end, float value, float brushSize)
+    {
+        float dist = Vector2.Distance(start, end);
 
-    //    Vector2 currentUV = gameLogic.playerController.cellUV;
-    //    float value = gameLogic.playerController.cellValue;
-    //    float brushSize = gameLogic.playerController.brushSize;
+        float stepSize = Mathf.Max(brushSize * 0.5f, 0.001f);
+        int steps = Mathf.CeilToInt(dist / stepSize);
 
-    //    bool isInputting = !float.IsNegativeInfinity(currentUV.x);
+        // 循环绘制所有插值点
+        for (int i = 1; i <= steps; ++i)
+        {
+            float t = (float)i / steps;
+            Vector2 lerpPos = Vector2.Lerp(start, end, t);
+            PaintCell(lerpPos, value, brushSize);
+        }
+    }
 
-    //    if (isInputting)
-    //    {
-    //        // 没有上yiz
-    //    }
-    //}
+    private void Paint()
+    {
+        Vector2 currentUV = gameLogic.playerController.cellUV;
+        float value = gameLogic.playerController.cellValue;
+        float brushSize = gameLogic.playerController.brushSize;
+
+        bool isInputting = !float.IsNegativeInfinity(currentUV.x);
+
+        if (isInputting)
+        {
+            // 没有上一帧数据或是距离很近
+            if (float.IsNegativeInfinity(_lastFrameUV.x) || Vector2.Distance(_lastFrameUV, currentUV) < 0.001f)
+            {
+                // 只画一个点
+                PaintCell(currentUV, value, brushSize);
+            }
+            else
+            {
+                // 计算两帧数之间的插值，绘制不间断线段
+                PaintLine(_lastFrameUV, currentUV, value, brushSize);
+            }
+
+            _lastFrameUV = currentUV;
+        }
+        else
+        {
+            _lastFrameUV = Vector2.negativeInfinity;
+        }
+    }
 }

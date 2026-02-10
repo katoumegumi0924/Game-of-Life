@@ -9,18 +9,19 @@ public class LifeData
     public RenderTexture texB;
     public bool useTexA = true;
     public RenderTexture currentTex { get { return useTexA ? texA : texB; } }
-    public ComputeShader shader;
+    public ComputeShader lifeShader;
     public uint resolutionY = Configs.gameOfLifeConfig.resolutionY;
     public uint resolutionX = Configs.gameOfLifeConfig.resolutionX;
 
     private GameObject displayImageObj;
     public RawImage displayImage;
 
+    // 初始状态，初始化与加载存档后更新
     public RenderTexture initTex;
 
     public void Init()
     {
-        shader = Configs.gpuConfig.gameOfLifeShader;
+        lifeShader = Configs.gpuConfig.lifeShader;
 
         texA = CreateRenderTexture();
         texB = CreateRenderTexture();
@@ -81,46 +82,21 @@ public class LifeData
     // 调用 ComputeShader 进行随机填充初始化
     private void SeedTexture(RenderTexture target)
     {
-        if (shader == null)
+        if (lifeShader == null)
             return;
 
-        int kernel = shader.FindKernel("CSInitRandom");
+        int kernel = lifeShader.FindKernel("CSInitRandom");
 
-        shader.SetTexture(kernel, "OutputTex", target);
-        shader.SetVector("resolution", new Vector2(resolutionX, resolutionY));
-        shader.SetFloat("seed", Random.Range(0f, 10f));
+        lifeShader.SetTexture(kernel, "OutputTex", target);
+        lifeShader.SetVector("resolution", new Vector2(resolutionX, resolutionY));
+        lifeShader.SetFloat("seed", Random.Range(0f, 10f));
 
         int groupsX = Mathf.CeilToInt(resolutionX / 8.0f);
         int groupsY = Mathf.CeilToInt(resolutionY / 8.0f);
-        shader.Dispatch(kernel, groupsX, groupsY, 1);
-#if UNITY_EDITOR
-        // 调试代码
-        Texture2D tex = RenderTextureToTexture2D(target);
-        byte[] bytes = tex.EncodeToPNG();
-        File.WriteAllBytes("Assets/Resources/test.png", bytes);
-#endif
+        lifeShader.Dispatch(kernel, groupsX, groupsY, 1);
     }
 
-    public static Texture2D RenderTextureToTexture2D(RenderTexture rt)
-    {
-        RenderTexture prev = RenderTexture.active;
-        RenderTexture.active = rt;
-
-        Texture2D tex = new Texture2D(
-            rt.width,
-            rt.height,
-            TextureFormat.RGBA32,
-            false,
-            false        // linear = false（重要）
-        );
-
-        tex.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0);
-        tex.Apply();
-
-        RenderTexture.active = prev;
-        return tex;
-    }
-
+    // 设置初始状态
     public void SetInitTexture(RenderTexture source)
     {
         if (source == null)
@@ -136,6 +112,7 @@ public class LifeData
         Graphics.Blit(source, initTex);
     }
 
+    // 重置当前状态为初始状态
     public void ResetTexture()
     {
         useTexA = true;

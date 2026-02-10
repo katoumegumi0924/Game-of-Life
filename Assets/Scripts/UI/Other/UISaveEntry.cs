@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UISaveItem : ManualBehavior
+public class UISaveEntry : ManualBehavior
 {
     public Text saveNameText;
     public RawImage previewImage;
@@ -12,25 +12,25 @@ public class UISaveItem : ManualBehavior
     private string path;
     public Action<string> onLoadAction;
     public Action<string> onDeleteAction;
-    private SaveItemInfo itemInfo;
+    private SaveEntryInfo entryInfo;
 
     protected override bool _OnInit()
     {
-        itemInfo = data as SaveItemInfo;
+        entryInfo = data as SaveEntryInfo;
 
-        if (itemInfo.path == null || itemInfo.saveName == null)
+        if (entryInfo.path == null || entryInfo.saveName == null)
             return false;
 
-        path = itemInfo.path;
+        path = entryInfo.path;
 
         if (saveNameText != null)
         {
-            saveNameText.text = itemInfo.saveName;
+            saveNameText.text = entryInfo.saveName;
         }
 
-        if (previewImage != null && itemInfo.previewTex != null)
+        if (previewImage != null && entryInfo.previewTex != null)
         {
-            previewImage.texture = itemInfo.previewTex;
+            previewImage.texture = entryInfo.previewTex;
         }
         else if (previewImage != null)
         {
@@ -64,13 +64,13 @@ public class UISaveItem : ManualBehavior
     }
 }
 
-public class SaveItemInfo
+public class SaveEntryInfo
 {
     public string path;
     public string saveName;
     public Texture2D previewTex;
 
-    public SaveItemInfo(string _path, string _saveName, Texture2D _previewTex)
+    public SaveEntryInfo(string _path, string _saveName, Texture2D _previewTex)
     {
         path = _path;
         saveName = _saveName;

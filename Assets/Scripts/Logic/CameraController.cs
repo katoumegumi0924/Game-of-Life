@@ -79,11 +79,5 @@ public class CameraController
 
             mainCamera.transform.position = new Vector3(_camera_position.x, _camera_position.y, -10f);
         }
-
-        // Z键重置相机状态
-        if (Input.GetKey(KeyCode.Z))
-        {
-            SetNew();
-        }
     }
 }

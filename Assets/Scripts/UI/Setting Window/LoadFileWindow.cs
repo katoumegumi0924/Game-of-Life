@@ -10,7 +10,7 @@ public class LoadFileWindow : ManualBehavior, IPointerEnterHandler, IPointerExit
     public GameObject fileItemPrefabs;
     public event Action<string> OnFileSelected;
 
-    private Dictionary<string, UISaveItem> saveItemsDic = new Dictionary<string, UISaveItem>();
+    private Dictionary<string, UISaveEntry> saveEntries = new Dictionary<string, UISaveEntry>();
 
     public static bool isHoveringScroll = false;
 
@@ -23,9 +23,9 @@ public class LoadFileWindow : ManualBehavior, IPointerEnterHandler, IPointerExit
     public void RefreshList()
     {
         FileInfo[] files = GetAllSaveFiles();
-        foreach (var item in saveItemsDic)
+        foreach (var item in saveEntries)
         {
-            UISaveItem uiItem = item.Value;
+            UISaveEntry uiItem = item.Value;
             if (uiItem != null)
             {
                 uiItem.onLoadAction -= OnClickFileLoad;
@@ -41,28 +41,28 @@ public class LoadFileWindow : ManualBehavior, IPointerEnterHandler, IPointerExit
             }
         }
 
-        saveItemsDic.Clear();
+        saveEntries.Clear();
 
         foreach (var file in files)
         {
-            CreateFileItem(file);
+            CreateSaveEntry(file);
         }
     }
 
     // 创建存档Item
-    private void CreateFileItem(FileInfo file)
+    private void CreateSaveEntry(FileInfo file)
     {
         if (fileItemPrefabs == null)
             return;
 
         GameObject fileItem = GameObject.Instantiate(fileItemPrefabs, content, false);
-        UISaveItem uiSaveItem = fileItem.GetComponent<UISaveItem>();
+        UISaveEntry uiSaveItem = fileItem.GetComponent<UISaveEntry>();
         Texture2D preImage = GameSave.LoadPreviewImage(file.FullName);
         uiSaveItem._Create();
-        uiSaveItem._Init(new SaveItemInfo(file.FullName, file.Name, preImage));
+        uiSaveItem._Init(new SaveEntryInfo(file.FullName, file.Name, preImage));
         uiSaveItem._Open();
 
-        saveItemsDic.Add(file.Name, uiSaveItem);
+        saveEntries.Add(file.Name, uiSaveItem);
 
         // 绑定点击事件
         uiSaveItem.onLoadAction += OnClickFileLoad;
@@ -110,9 +110,9 @@ public class LoadFileWindow : ManualBehavior, IPointerEnterHandler, IPointerExit
             return;
 
         string fileName = Path.GetFileName(path);
-        if (saveItemsDic.ContainsKey(fileName))
+        if (saveEntries.ContainsKey(fileName))
         {
-            UISaveItem currentFileItem = saveItemsDic[fileName];
+            UISaveEntry currentFileItem = saveEntries[fileName];
             currentFileItem.onLoadAction -= OnClickFileLoad;
             currentFileItem.onDeleteAction -= OnClickFileDelete;
             currentFileItem._Close();
