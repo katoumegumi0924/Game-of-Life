@@ -1,9 +1,6 @@
 using System;
 using UnityEngine;
 
-/// <summary>
-/// ManualBehavior：
-/// </summary>
 public class ManualBehavior : MonoBehaviour 
 {
     public bool created { get; private set; }
@@ -121,7 +118,7 @@ public class ManualBehavior : MonoBehaviour
         {
             if (!unsafeGameobjectState)
             {
-                if (gameObject.activeInHierarchy)
+                if (!gameObject.activeInHierarchy)
                 {
 #if UNITY_EDITOR
                     Debug.LogWarning("该对象已被关闭，但仍尝试手动更新");
@@ -152,7 +149,7 @@ public class ManualBehavior : MonoBehaviour
         {
             if (!unsafeGameobjectState)
             {
-                if (gameObject.activeInHierarchy)
+                if (!gameObject.activeInHierarchy)
                 {
 #if UNITY_EDITOR
                     Debug.LogWarning("该对象已被关闭，但仍尝试手动更新");

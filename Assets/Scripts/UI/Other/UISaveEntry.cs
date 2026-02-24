@@ -12,30 +12,30 @@ public class UISaveEntry : ManualBehavior
     private string path;
     public Action<string> onLoadAction;
     public Action<string> onDeleteAction;
-    private SaveEntryInfo entryInfo;
+    private SaveEntryInfo currentEntryInfo;
 
     protected override bool _OnInit()
     {
-        entryInfo = data as SaveEntryInfo;
+        currentEntryInfo = data as SaveEntryInfo;
 
-        if (entryInfo.path == null || entryInfo.saveName == null)
+        if (currentEntryInfo.path == null || currentEntryInfo.saveName == null)
             return false;
 
-        path = entryInfo.path;
+        path = currentEntryInfo.path;
 
         if (saveNameText != null)
         {
-            saveNameText.text = entryInfo.saveName;
+            saveNameText.text = currentEntryInfo.saveName;
         }
 
-        if (previewImage != null && entryInfo.previewTex != null)
+        if (previewImage != null && currentEntryInfo.previewTex != null)
         {
-            previewImage.texture = entryInfo.previewTex;
+            previewImage.texture = currentEntryInfo.previewTex;
         }
         else if (previewImage != null)
         {
             previewImage.texture = null;
-            previewImage.color = Color.black;
+            previewImage.color = Color.white;
         }
 
         return true;
@@ -61,6 +61,36 @@ public class UISaveEntry : ManualBehavior
     private void OnDeleteClick()
     {
         onDeleteAction?.Invoke(path);
+    }
+
+    // 用于为已经初始化的对象更新显示数据
+    public void SetDisplayInfo(SaveEntryInfo info)
+    {
+        // 清理旧数据
+        if (currentEntryInfo != null && currentEntryInfo.previewTex != null)
+        {
+            if (currentEntryInfo.previewTex != info.previewTex)
+            {
+                Texture2D.Destroy(currentEntryInfo.previewTex);
+            }
+        }
+
+        currentEntryInfo = info;
+
+        if (saveNameText != null)
+        {
+            saveNameText.text = currentEntryInfo.saveName;
+        }
+
+        if (previewImage != null && currentEntryInfo.previewTex != null)
+        {
+            previewImage.texture = currentEntryInfo.previewTex;
+        }
+        else if (previewImage != null)
+        {
+            previewImage.texture = null;
+            previewImage.color = Color.white;
+        }
     }
 }
 

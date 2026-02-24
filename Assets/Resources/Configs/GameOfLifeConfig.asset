@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fcaedc22f79f1b498543b7f7de570fb, type: 3}
   m_Name: GameOfLifeConfig
   m_EditorClassIdentifier: 
-  resolutionY: 64
-  resolutionX: 64
+  resolutionY: 128
+  resolutionX: 128
   singleStepTick: 50
   gameSaveFolder: F:\Cases\Game Of Life\Save\

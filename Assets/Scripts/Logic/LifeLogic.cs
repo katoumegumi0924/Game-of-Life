@@ -143,7 +143,6 @@ public class LifeLogic
     {
         RenderTexture texToSave = gameData.lifeData.currentTex;
         GameSave.SaveToBinary(texToSave, fileName);
-        UIRoot.instance.settingPanel.loadFileWindow._Open();
         UIRoot.instance.settingPanel.loadFileWindow.RefreshList();
         UIRoot.instance.settingPanel.saveinputWindow._Close();
     }

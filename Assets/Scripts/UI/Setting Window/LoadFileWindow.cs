@@ -10,7 +10,7 @@ public class LoadFileWindow : ManualBehavior, IPointerEnterHandler, IPointerExit
     public GameObject fileItemPrefabs;
     public event Action<string> OnFileSelected;
 
-    private Dictionary<string, UISaveEntry> saveEntries = new Dictionary<string, UISaveEntry>();
+    private List<UISaveEntry> saveEntriesPool = new List<UISaveEntry>();
 
     public static bool isHoveringScroll = false;
 
@@ -19,54 +19,52 @@ public class LoadFileWindow : ManualBehavior, IPointerEnterHandler, IPointerExit
         RefreshList();
     }
 
-    // 刷新存档列表
+    // 刷新存档列表 非常需要优化 应该可以使用DataPool
+    // 而且存档功能应该要重写，现在完全没有Import和Export
     public void RefreshList()
     {
         FileInfo[] files = GetAllSaveFiles();
-        foreach (var item in saveEntries)
+
+        // 回收uiEntry
+        for (int i = 0; i < saveEntriesPool.Count; ++i)
         {
-            UISaveEntry uiItem = item.Value;
-            if (uiItem != null)
+            UISaveEntry unusedEntry = saveEntriesPool[i];
+
+            // 回收时解绑事件
+            unusedEntry.onLoadAction -= OnClickFileLoad;
+            unusedEntry.onDeleteAction -= OnClickFileDelete;
+
+            unusedEntry._Free();
+        }
+
+        // 遍历存档文件
+        for (int i = 0; i < files.Length; i++)
+        {
+            UISaveEntry uiEntry;
+            FileInfo file = files[i];
+
+            if (i < saveEntriesPool.Count)
             {
-                uiItem.onLoadAction -= OnClickFileLoad;
-                uiItem.onDeleteAction -= OnClickFileDelete;
-
-                uiItem._Close();
-                uiItem._Free();
-
-                if (uiItem.gameObject != null)
-                {
-                    GameObject.Destroy(uiItem.gameObject);
-                }
+                // 复用对象池中的对象
+                uiEntry = saveEntriesPool[i];
             }
+            else
+            {
+                // 池子中数量不够，创建新的对象
+                GameObject fileItemObj = GameObject.Instantiate(fileItemPrefabs, content, false);
+                uiEntry = fileItemObj.GetComponent<UISaveEntry>();
+                uiEntry._Create();
+                saveEntriesPool.Add(uiEntry);
+            }
+
+            // 填充数据
+            Texture2D preImage = GameSave.LoadPreviewImage(file.FullName);
+            uiEntry._Init(new SaveEntryInfo(file.FullName, file.Name, preImage));
+            uiEntry._Open();
+
+            uiEntry.onLoadAction += OnClickFileLoad;
+            uiEntry.onDeleteAction += OnClickFileDelete;
         }
-
-        saveEntries.Clear();
-
-        foreach (var file in files)
-        {
-            CreateSaveEntry(file);
-        }
-    }
-
-    // 创建存档Item
-    private void CreateSaveEntry(FileInfo file)
-    {
-        if (fileItemPrefabs == null)
-            return;
-
-        GameObject fileItem = GameObject.Instantiate(fileItemPrefabs, content, false);
-        UISaveEntry uiSaveItem = fileItem.GetComponent<UISaveEntry>();
-        Texture2D preImage = GameSave.LoadPreviewImage(file.FullName);
-        uiSaveItem._Create();
-        uiSaveItem._Init(new SaveEntryInfo(file.FullName, file.Name, preImage));
-        uiSaveItem._Open();
-
-        saveEntries.Add(file.Name, uiSaveItem);
-
-        // 绑定点击事件
-        uiSaveItem.onLoadAction += OnClickFileLoad;
-        uiSaveItem.onDeleteAction += OnClickFileDelete;
     }
 
     // 获取存档文件
@@ -108,16 +106,6 @@ public class LoadFileWindow : ManualBehavior, IPointerEnterHandler, IPointerExit
     {
         if (path == null)
             return;
-
-        string fileName = Path.GetFileName(path);
-        if (saveEntries.ContainsKey(fileName))
-        {
-            UISaveEntry currentFileItem = saveEntries[fileName];
-            currentFileItem.onLoadAction -= OnClickFileLoad;
-            currentFileItem.onDeleteAction -= OnClickFileDelete;
-            currentFileItem._Close();
-            currentFileItem._Free();
-        }
 
         DeleteSave(path);
     }

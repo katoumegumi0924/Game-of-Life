@@ -23,6 +23,16 @@ public class GameData
         lifeTimeData.SetNew();
     }
 
+    public void Import()
+    {
+
+    }
+
+    public void Export()
+    {
+
+    }
+
     public void Free()
     {
         if (lifeData != null)
