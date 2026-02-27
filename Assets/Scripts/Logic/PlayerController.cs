@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class PlayerController
 {
@@ -52,7 +53,7 @@ public class PlayerController
     // 鼠标编辑细胞状态
     private void HandlePainting()
     {
-        if (LoadFileWindow.isHoveringScroll || SettingWindow.isHoveringSettingWindow || IterationRulesWindow.isHoveringIterationWindow || SaveInputWindow.isSaveInput)
+        if (IsPointerOverBlockingUI())
         {
             return;
         }
@@ -104,5 +105,27 @@ public class PlayerController
         float singlePixelUVSize = 1.0f / heightResolution;
 
         brushSize = singlePixelUVSize * 0.5f * size;
+    }
+
+    // 射线检测 判断鼠标当前是否位于真正的UI上
+    // 由于演化的RenderTexture也是在UI上，所以无法使用EventSystem.current.IsPointerOverGameObject()
+    private bool IsPointerOverBlockingUI()
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+        // 发出射线 获取所有被点中的UI元素
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        for (int i = 0; i < results.Count; ++i)
+        {
+            // 如果射线检测结果中存在演化UI之外的UI，说明鼠标被其他UI遮挡了
+            if (results[i].gameObject != displayImage.gameObject)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

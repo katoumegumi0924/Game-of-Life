@@ -18,6 +18,7 @@ public class LifeLogic
         lifeShader = data.lifeData.lifeShader;
         updateKernel = lifeShader.FindKernel("CSUpdate");
 
+        // 是否需要有一个EventBus
         UIRoot.instance.iterationRulesPanel.OnRuleSelected += OnSelectLifeRule;
 
         UIRoot.instance.settingPanel.OnPlayButtonClick += TogglePause;
@@ -27,7 +28,7 @@ public class LifeLogic
         UIRoot.instance.settingPanel.OnClearButtonClick += OnClearLife;
         UIRoot.instance.settingPanel.OnSaveButtonClick += OnOpenSaveInput;
         UIRoot.instance.settingPanel.OnLoadButtonClick += OnOpenLoad;
-        UIRoot.instance.settingPanel.OnRestButtonClick += OnReset;
+        UIRoot.instance.settingPanel.OnResetButtonClick += OnReset;
 
         UIRoot.instance.settingPanel.loadFileWindow.OnFileSelected += OnFileLoad;
         UIRoot.instance.settingPanel.saveinputWindow.OnConfirm += OnFileSave;
@@ -48,7 +49,7 @@ public class LifeLogic
         UIRoot.instance.settingPanel.OnClearButtonClick -= OnClearLife;
         UIRoot.instance.settingPanel.OnSaveButtonClick -= OnOpenSaveInput;
         UIRoot.instance.settingPanel.OnLoadButtonClick -= OnOpenLoad;
-        UIRoot.instance.settingPanel.OnRestButtonClick -= OnReset;
+        UIRoot.instance.settingPanel.OnResetButtonClick -= OnReset;
 
         UIRoot.instance.settingPanel.loadFileWindow.OnFileSelected -= OnFileLoad;
         UIRoot.instance.settingPanel.saveinputWindow.OnConfirm -= OnFileSave;
@@ -141,8 +142,7 @@ public class LifeLogic
 
     private void OnFileSave(string fileName)
     {
-        RenderTexture texToSave = gameData.lifeData.currentTex;
-        GameSave.SaveToBinary(texToSave, fileName);
+        GameSave.SaveGame(fileName, gameData);
         UIRoot.instance.settingPanel.loadFileWindow.RefreshList();
         UIRoot.instance.settingPanel.saveinputWindow._Close();
     }
@@ -150,7 +150,7 @@ public class LifeLogic
     private void OnFileLoad(string path)
     {
         gameData.lifeTimeData.Pause();
-        GameSave.LoadFromBinary(gameData.lifeData.currentTex, path);
+        GameSave.LoadGame(path, gameData);
 
         // 加载存档时更新lifeData的initTex
         gameData.lifeData.SetInitTexture(gameData.lifeData.currentTex);

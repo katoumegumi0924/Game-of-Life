@@ -23,7 +23,6 @@ int survivalMask;
 float random(float2 uv)
 {
     return frac(sin(dot(uv, float2(12.9898, 78.233))) * 43758.5453123 + seed);
-
 }
 
 [numthreads(8,8,1)]
@@ -39,7 +38,7 @@ void CSInitRandom(uint3 id : SV_DispatchThreadID)
 [numthreads(8,8,1)]
 void CSUpdate(uint3 id : SV_DispatchThreadID)
 {
-    uint2 centerPos = int2(id.xy);
+    int2 centerPos = int2(id.xy);
     uint aliveNeighbors = 0;
     // 遍历周围3x3区域，计算存活邻居数量
     for (int x = -1; x <= 1; ++x)
@@ -49,10 +48,10 @@ void CSUpdate(uint3 id : SV_DispatchThreadID)
             if (x == 0 && y == 0)
                 continue;
             
-            uint2 neighborPos = centerPos + int2(x, y);
+            int2 offsetPos = centerPos + int2(x, y) + (int) resolution;
 
             // 循环处理边界
-            neighborPos = (neighborPos + resolution) % resolution;
+            uint2 neighborPos = uint2(offsetPos) % resolution;
 
             if (InputTex[neighborPos].r < 0.5)
             {

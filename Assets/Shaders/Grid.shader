@@ -7,7 +7,7 @@ Shader "GOL/Grid"
         _ResolutionX ("ResolutionX", Float) = 512
         _ResolutionY ("ResolutionY", Float) = 512
         _Thickness ("Thickness", Range(0, 10)) = 5.0
-        [Toogle] _ShowGrid ("ShowGrid", Float) = 0
+        [Toggle] _ShowGrid ("ShowGrid", Float) = 0
     }
     SubShader
     {

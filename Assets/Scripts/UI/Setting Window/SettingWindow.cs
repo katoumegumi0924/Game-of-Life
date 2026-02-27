@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System;
 using UnityEngine;
 
-public class SettingWindow : ManualBehavior, IPointerEnterHandler, IPointerExitHandler
+public class SettingWindow : ManualBehavior
 {
     [Header("Window")]
     public SaveInputWindow saveinputWindow;
@@ -24,7 +24,7 @@ public class SettingWindow : ManualBehavior, IPointerEnterHandler, IPointerExitH
     public event Action<bool> OnGridToggle;
     public event Action OnPlayButtonClick;
     public event Action OnStepForwardClick;
-    public event Action OnRestButtonClick;
+    public event Action OnResetButtonClick;
     public event Action OnSpeedUpButtonClick;
     public event Action OnSlowDownButtonClick;
 
@@ -33,8 +33,6 @@ public class SettingWindow : ManualBehavior, IPointerEnterHandler, IPointerExitH
     public event Action OnLoadButtonClick;
 
     private bool showGrid;
-
-    public static bool isHoveringSettingWindow = false;
 
     protected override void _OnCreate()
     {
@@ -102,7 +100,7 @@ public class SettingWindow : ManualBehavior, IPointerEnterHandler, IPointerExitH
 
     private  void OnClickResetButton()
     {
-        OnRestButtonClick?.Invoke();
+        OnResetButtonClick?.Invoke();
     }
 
     private void OnClickSpeedUpButton()
@@ -128,15 +126,5 @@ public class SettingWindow : ManualBehavior, IPointerEnterHandler, IPointerExitH
     private void OnClickLoadButton()
     {
         OnLoadButtonClick?.Invoke();
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        isHoveringSettingWindow = true;
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        isHoveringSettingWindow = false;
     }
 }

@@ -27,6 +27,22 @@ public class TimeData
         tickDeltaIndex = 1;
     }
 
+    public void Import(System.IO.BinaryReader r)
+    {
+        r.ReadByte();
+
+        tickCounter = r.ReadInt64();
+        tickDeltaIndex = r.ReadInt32();
+    }
+
+    public void Export(System.IO.BinaryWriter w)
+    {
+        w.Write((byte)0);
+
+        w.Write(tickCounter);
+        w.Write(tickDeltaIndex);
+    }
+
     public void SpeedUp()
     {
         tickDeltaIndex++;

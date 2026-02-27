@@ -23,14 +23,20 @@ public class GameData
         lifeTimeData.SetNew();
     }
 
-    public void Import()
+    public void Import(System.IO.BinaryReader r)
     {
+        int ver = r.ReadByte();
 
+        lifeTimeData.Import(r);
+        lifeData.Import(r);
     }
 
-    public void Export()
+    public void Export(System.IO.BinaryWriter w)
     {
+        w.Write((byte)0);
 
+        lifeTimeData.Export(w);
+        lifeData.Export(w);
     }
 
     public void Free()

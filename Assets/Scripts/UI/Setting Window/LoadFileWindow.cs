@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class LoadFileWindow : ManualBehavior, IPointerEnterHandler, IPointerExitHandler
+public class LoadFileWindow : ManualBehavior
 {
     public Transform content;
     public GameObject fileItemPrefabs;
@@ -12,15 +12,12 @@ public class LoadFileWindow : ManualBehavior, IPointerEnterHandler, IPointerExit
 
     private List<UISaveEntry> saveEntriesPool = new List<UISaveEntry>();
 
-    public static bool isHoveringScroll = false;
-
     protected override void _OnOpen()
     {
         RefreshList();
     }
 
-    // 刷新存档列表 非常需要优化 应该可以使用DataPool
-    // 而且存档功能应该要重写，现在完全没有Import和Export
+    // 非常需要优化
     public void RefreshList()
     {
         FileInfo[] files = GetAllSaveFiles();
@@ -58,7 +55,7 @@ public class LoadFileWindow : ManualBehavior, IPointerEnterHandler, IPointerExit
             }
 
             // 填充数据
-            Texture2D preImage = GameSave.LoadPreviewImage(file.FullName);
+            Texture2D preImage = LifeData.LoadPreviewImage(file.FullName);
             uiEntry._Init(new SaveEntryInfo(file.FullName, file.Name, preImage));
             uiEntry._Open();
 
@@ -108,15 +105,5 @@ public class LoadFileWindow : ManualBehavior, IPointerEnterHandler, IPointerExit
             return;
 
         DeleteSave(path);
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        isHoveringScroll = true;
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        isHoveringScroll = false;
     }
 }

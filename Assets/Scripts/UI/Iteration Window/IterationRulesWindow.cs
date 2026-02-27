@@ -2,13 +2,11 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 
-public class IterationRulesWindow : ManualBehavior, IPointerEnterHandler, IPointerExitHandler
+public class IterationRulesWindow : ManualBehavior
 {
     public Dropdown rulesDropDown;
 
     public event Action<LifeRuleConfig> OnRuleSelected;
-
-    public static bool isHoveringIterationWindow;
 
     protected override bool _OnInit()
     {
@@ -51,15 +49,5 @@ public class IterationRulesWindow : ManualBehavior, IPointerEnterHandler, IPoint
         LifeRuleConfig lifeRule = ruleSet.GetLifeRule(index);
 
         OnRuleSelected?.Invoke(lifeRule);
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        isHoveringIterationWindow = true;
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        isHoveringIterationWindow = false;
     }
 }
