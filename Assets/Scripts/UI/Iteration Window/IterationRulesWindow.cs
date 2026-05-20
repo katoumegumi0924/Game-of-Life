@@ -6,8 +6,6 @@ public class IterationRulesWindow : ManualBehavior
 {
     public Dropdown rulesDropDown;
 
-    public event Action<LifeRuleConfig> OnRuleSelected;
-
     protected override bool _OnInit()
     {
         rulesDropDown.ClearOptions();
@@ -46,8 +44,6 @@ public class IterationRulesWindow : ManualBehavior
         if (ruleSet == null || index < 0 || index >= ruleSet.GetLifeRuleCount())
             return;
 
-        LifeRuleConfig lifeRule = ruleSet.GetLifeRule(index);
-
-        OnRuleSelected?.Invoke(lifeRule);
+        GameMain.instance.gameLogic.lifeLogic.lifeRule = ruleSet.GetLifeRule(index);
     }
 }

@@ -4,63 +4,50 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class LoadFileWindow : ManualBehavior
+public class LoadFileWindow : ManualBehavior, IPointerEnterHandler, IPointerExitHandler
 {
     public Transform content;
-    public GameObject fileItemPrefabs;
-    public event Action<string> OnFileSelected;
+    public UISaveEntry uiSaveEntryPrefab;
 
-    private List<UISaveEntry> saveEntriesPool = new List<UISaveEntry>();
+    private List<UISaveEntry> saveEntries = new List<UISaveEntry>();
+
+    public bool isHoveringLoadWindow = false;
 
     protected override void _OnOpen()
     {
         RefreshList();
     }
 
-    // 非常需要优化
+    protected override void _OnClose()
+    {
+        
+    }
+
     public void RefreshList()
     {
         FileInfo[] files = GetAllSaveFiles();
 
-        // 回收uiEntry
-        for (int i = 0; i < saveEntriesPool.Count; ++i)
+        for (int i = 0; i < files.Length; ++i)
         {
-            UISaveEntry unusedEntry = saveEntriesPool[i];
+            if (i >= saveEntries.Count)
+            {
+                UISaveEntry newFileEntry = UISaveEntry.Instantiate(uiSaveEntryPrefab, content, false);
+                newFileEntry._Create();
+                newFileEntry._Init(null);
+                saveEntries.Add(newFileEntry);
+            }
 
-            // 回收时解绑事件
-            unusedEntry.onLoadAction -= OnClickFileLoad;
-            unusedEntry.onDeleteAction -= OnClickFileDelete;
-
-            unusedEntry._Free();
+            var entry = saveEntries[i];
+            Texture2D preImage = LifeData.LoadPreviewImage(files[i].FullName);
+            var saveInfo = new SaveEntryInfo(files[i].FullName, files[i].Name, preImage);
+            entry.SetData(saveInfo);
+            if (this.active)
+                entry._Open();
         }
 
-        // 遍历存档文件
-        for (int i = 0; i < files.Length; i++)
+        for (int i = files.Length; i < saveEntries.Count; ++i)
         {
-            UISaveEntry uiEntry;
-            FileInfo file = files[i];
-
-            if (i < saveEntriesPool.Count)
-            {
-                // 复用对象池中的对象
-                uiEntry = saveEntriesPool[i];
-            }
-            else
-            {
-                // 池子中数量不够，创建新的对象
-                GameObject fileItemObj = GameObject.Instantiate(fileItemPrefabs, content, false);
-                uiEntry = fileItemObj.GetComponent<UISaveEntry>();
-                uiEntry._Create();
-                saveEntriesPool.Add(uiEntry);
-            }
-
-            // 填充数据
-            Texture2D preImage = LifeData.LoadPreviewImage(file.FullName);
-            uiEntry._Init(new SaveEntryInfo(file.FullName, file.Name, preImage));
-            uiEntry._Open();
-
-            uiEntry.onLoadAction += OnClickFileLoad;
-            uiEntry.onDeleteAction += OnClickFileDelete;
+            saveEntries[i]._Close();
         }
     }
 
@@ -75,35 +62,13 @@ public class LoadFileWindow : ManualBehavior
         return files;
     }
 
-    // 删除存档文件
-    private void DeleteSave(string path)
+    public void OnPointerExit(PointerEventData eventData)
     {
-        if (File.Exists(path))
-        {
-            File.Delete(path);
-        }
-
-        string imgPath = Path.ChangeExtension(path, ".PNG");
-        if (File.Exists(imgPath))
-        {
-            File.Delete(imgPath);
-        }
-
-        RefreshList();
-        Debug.Log($"已删除存档：{path}");
+        isHoveringLoadWindow = false;
     }
 
-    private void OnClickFileLoad(string path)
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        // 触发选择事件
-        OnFileSelected?.Invoke(path);
-    }
-
-    private void OnClickFileDelete(string path)
-    {
-        if (path == null)
-            return;
-
-        DeleteSave(path);
+        isHoveringLoadWindow = true;
     }
 }

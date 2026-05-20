@@ -32,4 +32,22 @@ public static class GameSave
             }
         }
     }
+
+    // 删除存档文件
+    public static void DeleteSave(string path)
+    {
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+
+        string imgPath = Path.ChangeExtension(path, ".PNG");
+        if (File.Exists(imgPath))
+        {
+            File.Delete(imgPath);
+        }
+
+        //RefreshList();
+        Debug.Log($"已删除存档：{path}");
+    }
 }

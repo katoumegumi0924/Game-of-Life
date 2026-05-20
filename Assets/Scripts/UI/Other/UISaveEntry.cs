@@ -14,33 +14,6 @@ public class UISaveEntry : ManualBehavior
     public Action<string> onDeleteAction;
     private SaveEntryInfo currentEntryInfo;
 
-    protected override bool _OnInit()
-    {
-        currentEntryInfo = data as SaveEntryInfo;
-
-        if (currentEntryInfo.path == null || currentEntryInfo.saveName == null)
-            return false;
-
-        path = currentEntryInfo.path;
-
-        if (saveNameText != null)
-        {
-            saveNameText.text = currentEntryInfo.saveName;
-        }
-
-        if (previewImage != null && currentEntryInfo.previewTex != null)
-        {
-            previewImage.texture = currentEntryInfo.previewTex;
-        }
-        else if (previewImage != null)
-        {
-            previewImage.texture = null;
-            previewImage.color = Color.white;
-        }
-
-        return true;
-    }
-
     protected override void _OnRegEvent()
     {
         LoadButton.onClick.AddListener(OnLoadClick);
@@ -55,16 +28,24 @@ public class UISaveEntry : ManualBehavior
 
     private void OnLoadClick()
     {
-        onLoadAction?.Invoke(path);
+        GameMain.instance.gameData.lifeTimeData.Pause();
+        GameSave.LoadGame(path, GameMain.instance.gameData);
+
+        // 加载存档时更新lifeData的initTex
+        GameMain.instance.gameData.lifeData.SetInitTexture(GameMain.instance.gameData.lifeData.currentTex);
     }
 
     private void OnDeleteClick()
     {
-        onDeleteAction?.Invoke(path);
+        if (string.IsNullOrEmpty(path) || string.IsNullOrWhiteSpace(path))
+            return;
+
+        GameSave.DeleteSave(path);
+        UIRoot.instance.settingWindow.loadFileWindow.RefreshList();
     }
 
     // 用于为已经初始化的对象更新显示数据
-    public void SetDisplayInfo(SaveEntryInfo info)
+    public void SetData(SaveEntryInfo info)
     {
         // 清理旧数据
         if (currentEntryInfo != null && currentEntryInfo.previewTex != null)
@@ -76,6 +57,7 @@ public class UISaveEntry : ManualBehavior
         }
 
         currentEntryInfo = info;
+        path = currentEntryInfo.path;
 
         if (saveNameText != null)
         {

@@ -212,7 +212,7 @@ public class LifeData
         }
 
         // 保存同名的预览图
-        //SavePreviewImage(sourceTex, path);
+        // SavePreviewImage(sourceTex, path);
         Debug.Log($"存档完成，当前状态已保存");
     }
 

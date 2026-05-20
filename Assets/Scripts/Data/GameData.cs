@@ -17,6 +17,21 @@ public class GameData
         lifeTimeData.Init();
     }
 
+    public void Free()
+    {
+        if (lifeData != null)
+        {
+            lifeData.Free();
+            lifeData = null;
+        }
+
+        if (lifeTimeData != null)
+        {
+            lifeTimeData.Free();
+            lifeTimeData = null;
+        }
+    }
+
     public void SetNew()
     {
         lifeData.SetNew();
@@ -37,20 +52,5 @@ public class GameData
 
         lifeTimeData.Export(w);
         lifeData.Export(w);
-    }
-
-    public void Free()
-    {
-        if (lifeData != null)
-        {
-            lifeData.Free();
-            lifeData = null;
-        }
-
-        if (lifeTimeData != null)
-        {
-            lifeTimeData.Free();
-            lifeTimeData = null;
-        }
     }
 }

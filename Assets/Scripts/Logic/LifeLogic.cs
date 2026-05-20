@@ -2,36 +2,21 @@ using UnityEngine;
 
 public class LifeLogic
 {
-    private GameData gameData;
-    private ComputeShader lifeShader;
+    public GameData gameData;
+    public ComputeShader lifeShader;
+    public LifeRuleConfig lifeRule;
+
     private int updateKernel;
     private uint resolutionX = Configs.gameOfLifeConfig.resolutionX;
     private uint resolutionY = Configs.gameOfLifeConfig.resolutionY;
 
     private int accumulator = 0;
 
-    private LifeRuleConfig lifeRule;
-
     public void Init(GameData data)
     {
         gameData = data;
         lifeShader = data.lifeData.lifeShader;
         updateKernel = lifeShader.FindKernel("CSUpdate");
-
-        // 是否需要有一个EventBus
-        UIRoot.instance.iterationRulesPanel.OnRuleSelected += OnSelectLifeRule;
-
-        UIRoot.instance.settingPanel.OnPlayButtonClick += TogglePause;
-        UIRoot.instance.settingPanel.OnStepForwardClick += OnStepForward;
-        UIRoot.instance.settingPanel.OnSpeedUpButtonClick += OnSpeedUp;
-        UIRoot.instance.settingPanel.OnSlowDownButtonClick += OnSlowDown;
-        UIRoot.instance.settingPanel.OnClearButtonClick += OnClearLife;
-        UIRoot.instance.settingPanel.OnSaveButtonClick += OnOpenSaveInput;
-        UIRoot.instance.settingPanel.OnLoadButtonClick += OnOpenLoad;
-        UIRoot.instance.settingPanel.OnResetButtonClick += OnReset;
-
-        UIRoot.instance.settingPanel.loadFileWindow.OnFileSelected += OnFileLoad;
-        UIRoot.instance.settingPanel.saveinputWindow.OnConfirm += OnFileSave;
     }
 
     public void Free()
@@ -39,20 +24,6 @@ public class LifeLogic
         gameData = null;
         lifeShader = null;
         updateKernel = 0;
-
-        UIRoot.instance.iterationRulesPanel.OnRuleSelected -= OnSelectLifeRule;
-
-        UIRoot.instance.settingPanel.OnPlayButtonClick -= TogglePause;
-        UIRoot.instance.settingPanel.OnStepForwardClick -= OnStepForward;
-        UIRoot.instance.settingPanel.OnSpeedUpButtonClick -= OnSpeedUp;
-        UIRoot.instance.settingPanel.OnSlowDownButtonClick -= OnSlowDown;
-        UIRoot.instance.settingPanel.OnClearButtonClick -= OnClearLife;
-        UIRoot.instance.settingPanel.OnSaveButtonClick -= OnOpenSaveInput;
-        UIRoot.instance.settingPanel.OnLoadButtonClick -= OnOpenLoad;
-        UIRoot.instance.settingPanel.OnResetButtonClick -= OnReset;
-
-        UIRoot.instance.settingPanel.loadFileWindow.OnFileSelected -= OnFileLoad;
-        UIRoot.instance.settingPanel.saveinputWindow.OnConfirm -= OnFileSave;
     }
 
     public void SetNew()
@@ -98,75 +69,5 @@ public class LifeLogic
         int groupY = Mathf.CeilToInt(resolutionY / 8.0f);
 
         lifeShader.Dispatch(clearKernel, groupX, groupY, 1);
-    }
-
-    private void OnSelectLifeRule(LifeRuleConfig _lifeRule)
-    {
-        lifeRule = _lifeRule;
-    }
-
-    private void OnStepForward()
-    {
-        gameData.lifeTimeData.Pause();
-        LifeUpdate();
-    }
-
-    private void TogglePause()
-    {
-        gameData.lifeTimeData.TogglePause();
-    }
-
-    private void OnSpeedUp()
-    {
-        gameData.lifeTimeData.UnPause();
-        gameData.lifeTimeData.SpeedUp();
-    }
-
-    private void OnSlowDown()
-    {
-        gameData.lifeTimeData.UnPause();
-        gameData.lifeTimeData.SlowDown();
-    }
-
-    private void OnReset()
-    {
-        gameData.lifeData.ResetTexture();
-    }
-
-    private void OnOpenSaveInput()
-    {
-        string fileName = $"save_{System.DateTime.Now:yyyyMMdd_HHmmss}";
-        UIRoot.instance.settingPanel.saveinputWindow.saveNameInputField.text = fileName;
-        UIRoot.instance.settingPanel.saveinputWindow._Open();     
-    }
-
-    private void OnFileSave(string fileName)
-    {
-        GameSave.SaveGame(fileName, gameData);
-        UIRoot.instance.settingPanel.loadFileWindow.RefreshList();
-        UIRoot.instance.settingPanel.saveinputWindow._Close();
-    }
-
-    private void OnFileLoad(string path)
-    {
-        gameData.lifeTimeData.Pause();
-        GameSave.LoadGame(path, gameData);
-
-        // 加载存档时更新lifeData的initTex
-        gameData.lifeData.SetInitTexture(gameData.lifeData.currentTex);
-    }
-
-    private void OnOpenLoad()
-    {
-        // OnClearLife();
-        // gameData.lifeTimeData.Pause();
-        if (!UIRoot.instance.settingPanel.loadFileWindow.active)
-        {
-            UIRoot.instance.settingPanel.loadFileWindow._Open();
-        }
-        else
-        {
-            UIRoot.instance.settingPanel.loadFileWindow._Close();
-        }
     }
 }

@@ -11,16 +11,20 @@ public class SaveInputWindow : ManualBehavior
 
     public event Action<string> OnConfirm;
 
-    public static bool isSaveInput = false;
+    //public static bool isSaveInput = false;
 
     protected override void _OnOpen()
     {
-        isSaveInput = true;
+        //isSaveInput = true;
+
+        GameMain.instance.gameData.lifeTimeData.Pause();
     }
 
     protected override void _OnClose()
     {
-        isSaveInput = false;
+        //isSaveInput = false;
+
+        GameMain.instance.gameData.lifeTimeData.UnPause();
     }
 
     protected override void _OnRegEvent()
@@ -47,6 +51,10 @@ public class SaveInputWindow : ManualBehavior
         }
 
         OnConfirm?.Invoke(inputName);
+
+        GameSave.SaveGame(inputName, GameMain.instance.gameData);
+        UIRoot.instance.settingWindow.loadFileWindow.RefreshList();
+        _Close();
     }
 
     private void OnCancelClick()

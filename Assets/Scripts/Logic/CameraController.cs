@@ -38,6 +38,11 @@ public class CameraController
 
     public void UpdateCamera()
     {
+        if (UIRoot.instance.settingWindow.loadFileWindow.isHoveringLoadWindow)
+        {
+            return;
+        }
+
         // 处理缩放
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (Mathf.Abs(scroll) > 0.01f)

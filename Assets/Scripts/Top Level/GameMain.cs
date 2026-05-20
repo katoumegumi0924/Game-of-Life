@@ -2,12 +2,16 @@ using UnityEngine;
 
 public class GameMain : MonoBehaviour
 {
+    public static GameMain instance { get; private set; }
+
     public GameData gameData;
     public GameLogic gameLogic;
     public GameModel gameModel;
 
     public void Init()
     {
+        instance = this;
+
         gameData = new GameData();
         gameData.Init();
         gameData.SetNew();
@@ -39,6 +43,8 @@ public class GameMain : MonoBehaviour
             gameData.Free();
             gameData = null;
         }
+
+        instance = null;
     }
 
     private void Update()

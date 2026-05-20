@@ -12,22 +12,20 @@ public class UIRoot : ManualBehavior
 
     [Header("Panel")]
     public IterationRulesWindow iterationRulesPanel;
-    public SettingWindow settingPanel;
+    public SettingWindow settingWindow;
     
-    
-
     protected override void _OnCreate()
     {
         _instance = this;
         iterationRulesPanel._Create();
-        settingPanel._Create();
+        settingWindow._Create();
     }
 
     protected override void _OnDestroy()
     {
         _instance = null;
         iterationRulesPanel._Destroy();
-        settingPanel._Destroy();
+        settingWindow._Destroy();
     }
 
     protected override bool _OnInit()
@@ -35,8 +33,8 @@ public class UIRoot : ManualBehavior
         iterationRulesPanel._Init(null);
         iterationRulesPanel._Open();
 
-        settingPanel._Init(null);
-        settingPanel._Open();
+        settingWindow._Init(null);
+        settingWindow._Open();
 
         return true;
     }

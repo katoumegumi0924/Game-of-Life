@@ -21,17 +21,6 @@ public class SettingWindow : ManualBehavior
     public Button saveButton;
     public Button loadButton;
 
-    public event Action<bool> OnGridToggle;
-    public event Action OnPlayButtonClick;
-    public event Action OnStepForwardClick;
-    public event Action OnResetButtonClick;
-    public event Action OnSpeedUpButtonClick;
-    public event Action OnSlowDownButtonClick;
-
-    public event Action OnClearButtonClick;
-    public event Action OnSaveButtonClick;
-    public event Action OnLoadButtonClick;
-
     private bool showGrid;
 
     protected override void _OnCreate()
@@ -51,6 +40,12 @@ public class SettingWindow : ManualBehavior
         loadFileWindow._Init(null);
         saveinputWindow._Init(null);
         return true;
+    }
+
+    protected override void _OnFree()
+    {
+        loadFileWindow._Free();
+        saveinputWindow._Free();
     }
 
     protected override void _OnRegEvent()
@@ -85,46 +80,58 @@ public class SettingWindow : ManualBehavior
     {
         showGrid = !showGrid;
 
-        OnGridToggle?.Invoke(showGrid);
+        GameMain.instance.gameModel.gameOfLifeRenderer.OnGridShow(showGrid);
     }
 
     private void OnClickPlayButton()
     {
-        OnPlayButtonClick?.Invoke();
+        GameMain.instance.gameData.lifeTimeData.TogglePause();
     }
 
     private void OnClickStepForwardButton()
     {
-        OnStepForwardClick?.Invoke();
+        GameMain.instance.gameData.lifeTimeData.Pause();
+        GameMain.instance.gameLogic.lifeLogic.LifeUpdate();
     }
 
     private  void OnClickResetButton()
     {
-        OnResetButtonClick?.Invoke();
+        GameMain.instance.gameData.lifeData.ResetTexture();
     }
 
     private void OnClickSpeedUpButton()
     {
-        OnSpeedUpButtonClick?.Invoke();
+        GameMain.instance.gameData.lifeTimeData.UnPause();
+        GameMain.instance.gameData.lifeTimeData.SpeedUp();
     }
 
     private void OnClickSlowDownButton()
     {
-        OnSlowDownButtonClick?.Invoke();
+        GameMain.instance.gameData.lifeTimeData.UnPause();
+        GameMain.instance.gameData.lifeTimeData.SlowDown();
     }
 
     private void OnClickClearButton()
     {
-        OnClearButtonClick?.Invoke();
+        GameMain.instance.gameLogic.lifeLogic.OnClearLife();
     }
 
     private void OnClickSaveButton()
     {
-        OnSaveButtonClick?.Invoke();
+        string fileName = $"save_{System.DateTime.Now:yyyyMMdd_HHmmss}";
+        saveinputWindow.saveNameInputField.text = fileName;
+        saveinputWindow._Open();
     }
 
     private void OnClickLoadButton()
     {
-        OnLoadButtonClick?.Invoke();
+        if (!loadFileWindow.active)
+        {
+            loadFileWindow._Open();
+        }
+        else
+        {
+            loadFileWindow._Close();
+        }
     }
 }
