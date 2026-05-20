@@ -23,8 +23,6 @@ public class LifeRenderer
         gridMaterial.SetFloat("_ResolutionX", Configs.gameOfLifeConfig.resolutionX);
         gridMaterial.SetFloat("_ResolutionY", Configs.gameOfLifeConfig.resolutionY);
         paintMaterial = Material.Instantiate(Configs.gameResourcesConfig.paint);
-
-        //UIRoot.instance.settingPanel.OnGridToggle += OnGridShow;
     }
 
     public void Free()
@@ -32,12 +30,17 @@ public class LifeRenderer
         displayImage = null;
         gridMaterial = null;
 
+        if (gridMaterial != null)
+        {
+            Material.Destroy(gridMaterial);
+            gridMaterial = null;
+        }
+
         if (paintMaterial != null)
         {
             Material.Destroy(paintMaterial);
+            paintMaterial = null;
         }
-
-        //UIRoot.instance.settingPanel.OnGridToggle -= OnGridShow;
     }
 
     public void OnUpdate()

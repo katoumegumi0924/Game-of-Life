@@ -13,6 +13,9 @@ public class PlayerController
     public float cellValue;
     public float brushSize;
 
+    private PointerEventData _pointerEventData;
+    private List<RaycastResult> _raycastResults = new List<RaycastResult>();
+
     public void Init(GameData _gameData)
     {
         gameData = _gameData;
@@ -53,26 +56,26 @@ public class PlayerController
     // 鼠标编辑细胞状态
     private void HandlePainting()
     {
+        bool leftClick = Input.GetMouseButton(0);
+        bool rightClick = Input.GetMouseButton(1);
+
+        if (!leftClick && !rightClick)
+        {
+            // 没有点击鼠标时 cellUv 设为无效值
+            cellUV = Vector2.negativeInfinity;
+            return;
+        }
+
         if (IsPointerOverBlockingUI())
         {
             return;
         }
 
-        bool leftClick = Input.GetMouseButton(0);
-        bool rightClick = Input.GetMouseButton(1);
-        if (leftClick || rightClick)
-        {
-            cellUV = GetUVFromMouse();
+        cellUV = GetUVFromMouse();
 
-            if (cellUV != Vector2.negativeInfinity)
-            {
-                cellValue = leftClick ? 0.0f : 1.0f;
-            }
-        }
-        else
+        if (cellUV != Vector2.negativeInfinity)
         {
-            // 没有点击鼠标时 cellUv 设为无效值
-            cellUV = Vector2.negativeInfinity;
+            cellValue = leftClick ? 0.0f : 1.0f;
         }
     }
 
@@ -111,16 +114,21 @@ public class PlayerController
     // 由于演化的RenderTexture也是在UI上，所以无法使用EventSystem.current.IsPointerOverGameObject()
     private bool IsPointerOverBlockingUI()
     {
-        PointerEventData eventData = new PointerEventData(EventSystem.current);
-        eventData.position = Input.mousePosition;
-        // 发出射线 获取所有被点中的UI元素
-        List<RaycastResult> results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventData, results);
+        if (_pointerEventData == null)
+        {
+            _pointerEventData = new PointerEventData(EventSystem.current);
+        }
 
-        for (int i = 0; i < results.Count; ++i)
+        _pointerEventData.position = Input.mousePosition;
+        _raycastResults.Clear();
+
+        // 发出射线 获取所有被点中的UI元素
+        EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);
+
+        for (int i = 0; i < _raycastResults.Count; ++i)
         {
             // 如果射线检测结果中存在演化UI之外的UI，说明鼠标被其他UI遮挡了
-            if (results[i].gameObject != displayImage.gameObject)
+            if (_raycastResults[i].gameObject != displayImage.gameObject)
             {
                 return true;
             }

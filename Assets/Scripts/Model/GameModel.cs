@@ -15,6 +15,7 @@ public class GameModel
         if (gameOfLifeRenderer != null)
         {
             gameOfLifeRenderer.Free();
+            gameOfLifeRenderer = null;
         }
     }
 
