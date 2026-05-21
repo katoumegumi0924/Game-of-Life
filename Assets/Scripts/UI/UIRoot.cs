@@ -11,8 +11,8 @@ public class UIRoot : ManualBehavior
     public Canvas worldCanvas;
 
     [Header("Panel")]
-    public IterationRulesWindow iterationRulesPanel;
-    public SettingWindow settingWindow;
+    public UIIterationRules iterationRulesPanel;
+    public UISettingMenu settingWindow;
     
     protected override void _OnCreate()
     {

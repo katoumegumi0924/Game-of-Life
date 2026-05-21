@@ -3,13 +3,11 @@ using UnityEngine;
 using System;
 using UnityEngine.EventSystems;
 
-public class SaveInputWindow : ManualBehavior
+public class UISaveInput : ManualBehavior
 {
     public InputField saveNameInputField;
     public Button confirmButton;
     public Button cancelButton;
-
-    public event Action<string> OnConfirm;
 
     //public static bool isSaveInput = false;
 
@@ -49,8 +47,6 @@ public class SaveInputWindow : ManualBehavior
             Debug.LogWarning("存档名称不能为空");
             return;
         }
-
-        OnConfirm?.Invoke(inputName);
 
         GameSave.SaveGame(inputName, GameMain.instance.gameData);
         UIRoot.instance.settingWindow.loadFileWindow.RefreshList();

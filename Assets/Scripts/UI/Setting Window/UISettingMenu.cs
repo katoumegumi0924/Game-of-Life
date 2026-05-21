@@ -3,11 +3,11 @@ using UnityEngine.UI;
 using System;
 using UnityEngine;
 
-public class SettingWindow : ManualBehavior
+public class UISettingMenu : ManualBehavior
 {
     [Header("Window")]
-    public SaveInputWindow saveinputWindow;
-    public LoadFileWindow loadFileWindow;
+    public UISaveInput saveinputWindow;
+    public UILoadFile loadFileWindow;
 
     [Header("Button")]
     public Button gridButton;
@@ -20,8 +20,6 @@ public class SettingWindow : ManualBehavior
     public Button clearButton;
     public Button saveButton;
     public Button loadButton;
-
-    //private bool showGrid;
 
     protected override void _OnCreate()
     {

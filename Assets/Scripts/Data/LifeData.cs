@@ -64,6 +64,12 @@ public class LifeData
             texB = null;
         }
 
+        if (initTex != null)
+        {
+            initTex.Release();
+            initTex = null;
+        }
+
         showGrid = false;
     }
 
@@ -144,6 +150,7 @@ public class LifeData
     {
         useTexA = true;
         Graphics.Blit(initTex, texA);
+        Graphics.Blit(initTex, texB);
     }
 
     // ±£¥Ê‘§¿¿Õº

@@ -73,9 +73,9 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _Resolution: 64
-    - _ResolutionX: 100
-    - _ResolutionY: 100
-    - _ShowGrid: 0
+    - _ResolutionX: 800
+    - _ResolutionY: 800
+    - _ShowGrid: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

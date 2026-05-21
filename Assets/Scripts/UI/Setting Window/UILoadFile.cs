@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class LoadFileWindow : ManualBehavior, IPointerEnterHandler, IPointerExitHandler
+public class UILoadFile : ManualBehavior, IPointerEnterHandler, IPointerExitHandler
 {
     public Transform content;
     public UISaveEntry uiSaveEntryPrefab;

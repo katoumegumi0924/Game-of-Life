@@ -20,18 +20,18 @@ public class LifeRenderer
         displayImageObj = CreateDisplayObj();
         displayImage = displayImageObj.GetComponent<RawImage>();
 
-        gridMaterial = displayImage.material;
+        gridMaterial = new Material(displayImage.material);
         gridMaterial.SetFloat("_ResolutionX", Configs.gameOfLifeConfig.resolutionX);
         gridMaterial.SetFloat("_ResolutionY", Configs.gameOfLifeConfig.resolutionY);
         // Ä¬ÈÏ¹Ø±ÕÍø¸ñ
         gridMaterial.SetFloat("_ShowGrid", 0.0f);
+        displayImage.material = gridMaterial;
         paintMaterial = Material.Instantiate(Configs.gameResourcesConfig.paint);
     }
 
     public void Free()
     {
         displayImage = null;
-        gridMaterial = null;
 
         if (gridMaterial != null)
         {
@@ -85,7 +85,7 @@ public class LifeRenderer
         paintMaterial.SetFloat("_PaintColor", value);
         paintMaterial.SetFloat("_BrushSize", brushSize);
 
-        float aspect = resolutionX / resolutionY;
+        float aspect = (float)resolutionX / resolutionY;
         paintMaterial.SetFloat("_AspectRatio", aspect);
 
         RenderTexture temp = RenderTexture.GetTemporary(resolutionX, resolutionY, 0);

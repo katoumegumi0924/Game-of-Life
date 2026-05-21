@@ -2,7 +2,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 
-public class IterationRulesWindow : ManualBehavior
+public class UIIterationRules : ManualBehavior
 {
     public Dropdown rulesDropDown;
 
