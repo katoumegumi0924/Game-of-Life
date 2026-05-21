@@ -21,7 +21,7 @@ public class SettingWindow : ManualBehavior
     public Button saveButton;
     public Button loadButton;
 
-    private bool showGrid;
+    //private bool showGrid;
 
     protected override void _OnCreate()
     {
@@ -39,6 +39,7 @@ public class SettingWindow : ManualBehavior
     {
         loadFileWindow._Init(null);
         saveinputWindow._Init(null);
+
         return true;
     }
 
@@ -78,9 +79,7 @@ public class SettingWindow : ManualBehavior
 
     private void OnClickGridButton()
     {
-        showGrid = !showGrid;
-
-        GameMain.instance.gameModel.gameOfLifeRenderer.OnGridShow(showGrid);
+        GameMain.instance.gameData.lifeData.showGrid = !GameMain.instance.gameData.lifeData.showGrid;
     }
 
     private void OnClickPlayButton()

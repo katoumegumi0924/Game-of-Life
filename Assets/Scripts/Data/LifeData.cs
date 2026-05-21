@@ -8,14 +8,32 @@ public class LifeData
     public RenderTexture texA { get; private set; }
     public RenderTexture texB { get; private set; }
     public bool useTexA = true;
+
+    private bool _showGrid;
+    public bool showGrid
+    {
+        get 
+        { 
+            return _showGrid; 
+        }
+
+        set
+        {
+            _showGrid = value;
+
+            if (GameMain.instance != null && GameMain.instance.gameModel != null)
+            {
+                GameMain.instance.gameModel.gameOfLifeRenderer.OnGridShow(_showGrid);
+            }
+        }
+    }
+
     public RenderTexture currentTex { get { return useTexA ? texA : texB; } }
 
     public ComputeShader lifeShader;
 
     private uint resolutionY = Configs.gameOfLifeConfig.resolutionY;
     private uint resolutionX = Configs.gameOfLifeConfig.resolutionX;
-    private GameObject displayImageObj;
-    public RawImage displayImage { get; private set; }
 
     // 初始状态，初始化与加载存档后更新
     public RenderTexture initTex;
@@ -27,12 +45,13 @@ public class LifeData
         texA = CreateRenderTexture();
         texB = CreateRenderTexture();
 
-        displayImageObj = CreateDisplayObj();
-        displayImage = displayImageObj.GetComponent<RawImage>();
+        showGrid = false;
     }
 
     public void Free()
     {
+        lifeShader = null;
+
         if (texA != null)
         {
             texA.Release();
@@ -45,26 +64,30 @@ public class LifeData
             texB = null;
         }
 
-        if (displayImageObj != null)
-        {
-            displayImage = null;
-            GameObject.Destroy(displayImageObj);
-        }
+        showGrid = false;
     }
 
     public void SetNew()
     {
         SeedTexture(texA);
         SetInitTexture(texA);
+
+        showGrid = false;
     }
 
     public void Import(System.IO.BinaryReader r)
     {
+        r.ReadInt32();
+
+        showGrid = r.ReadBoolean();
         RTLoadFromBinary(r, currentTex);
     }
 
     public void Export(System.IO.BinaryWriter w)
     {
+        w.Write(0);
+
+        w.Write(showGrid);
         RTSaveToBinary(w, currentTex);
     }
 
@@ -81,13 +104,6 @@ public class LifeData
         rt.wrapMode = TextureWrapMode.Repeat;
         rt.Create();
         return rt;
-    }
-
-    private GameObject CreateDisplayObj()
-    {
-        GameObject prefab = Configs.gameResourcesConfig.displayImagePrefab;
-        Canvas canvas = UIRoot.instance.worldCanvas;
-        return GameObject.Instantiate(prefab, canvas.transform, false);   
     }
 
     // 调用 ComputeShader 进行随机填充初始化
@@ -213,7 +229,10 @@ public class LifeData
 
         // 保存同名的预览图
         // SavePreviewImage(sourceTex, path);
+
+#if UNITY_EDITOR
         Debug.Log($"存档完成，当前状态已保存");
+#endif
     }
 
     // 加载存档迭代状态
@@ -286,6 +305,8 @@ public class LifeData
         Graphics.Blit(tex, targetTex);
         Texture2D.Destroy(tex);
 
+#if UNITY_EDITOR
         Debug.Log("存档加载完成！");
+#endif
     }
 }

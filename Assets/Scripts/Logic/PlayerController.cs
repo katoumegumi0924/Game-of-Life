@@ -5,9 +5,7 @@ using System.Collections.Generic;
 
 public class PlayerController
 {
-    private GameData gameData;
-
-    private RawImage displayImage;
+    public GameData gameData;
 
     public Vector2 cellUV;
     public float cellValue;
@@ -19,16 +17,11 @@ public class PlayerController
     public void Init(GameData _gameData)
     {
         gameData = _gameData;
-
-        displayImage = gameData.lifeData.displayImage;
-        
     }
 
     public void Free()
     {
         gameData = null;
-
-        displayImage = null; 
     }
 
     public void SetNew()
@@ -83,6 +76,7 @@ public class PlayerController
     private Vector2 GetUVFromMouse()
     {
         Vector2 localPoint;
+        var displayImage = GameMain.instance.gameModel.gameOfLifeRenderer.displayImage;
         RectTransform rectTransform = displayImage.rectTransform;
 
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, Input.mousePosition, Camera.main, out localPoint))
@@ -122,6 +116,7 @@ public class PlayerController
         _pointerEventData.position = Input.mousePosition;
         _raycastResults.Clear();
 
+        var displayImage = GameMain.instance.gameModel.gameOfLifeRenderer.displayImage;
         // 发出射线 获取所有被点中的UI元素
         EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);
 

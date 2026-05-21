@@ -232,7 +232,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -30}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 50, y: 22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &68223895
 MonoBehaviour:
@@ -288,6 +288,7 @@ GameObject:
   - component: {fileID: 75240992}
   - component: {fileID: 75240991}
   - component: {fileID: 75240990}
+  - component: {fileID: 75240993}
   m_Layer: 5
   m_Name: step-forward-button
   m_TagString: Untagged
@@ -397,6 +398,70 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 75240988}
   m_CullTransparentMesh: 1
+--- !u!114 &75240993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75240988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7139440a8ab4954ab2e51feca83cbf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 0}
+  input: {fileID: 0}
+  data: 0
+  audios:
+    enterName: 
+    downName: 
+    upName: 
+  tips:
+    topLevel: 0
+    level: 0
+    delay: 0
+    itemId: 0
+    itemCount: 0
+    itemInc: 0
+    tipSprite: {fileID: 0}
+    tipTitle: 
+    tipText: 
+    corner: 0
+    offset: {x: 0, y: 0}
+    width: 0
+    type: 0
+  transitions:
+  - target: {fileID: 75240991}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  - target: {fileID: 1827271869}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  highlighted: 0
+  updating: 0
+  tipTitleFormatString: 
+  tipTextFormatString: 
 --- !u!1 &84862140
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,7 +497,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -30}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 50, y: 22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &84862142
 MonoBehaviour:
@@ -488,6 +553,7 @@ GameObject:
   - component: {fileID: 130514263}
   - component: {fileID: 130514262}
   - component: {fileID: 130514261}
+  - component: {fileID: 130514264}
   m_Layer: 5
   m_Name: save-button
   m_TagString: Untagged
@@ -597,6 +663,70 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 130514259}
   m_CullTransparentMesh: 1
+--- !u!114 &130514264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 130514259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7139440a8ab4954ab2e51feca83cbf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 0}
+  input: {fileID: 0}
+  data: 0
+  audios:
+    enterName: 
+    downName: 
+    upName: 
+  tips:
+    topLevel: 0
+    level: 0
+    delay: 0
+    itemId: 0
+    itemCount: 0
+    itemInc: 0
+    tipSprite: {fileID: 0}
+    tipTitle: 
+    tipText: 
+    corner: 0
+    offset: {x: 0, y: 0}
+    width: 0
+    type: 0
+  transitions:
+  - target: {fileID: 130514262}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  - target: {fileID: 2106539662}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  highlighted: 0
+  updating: 0
+  tipTitleFormatString: 
+  tipTextFormatString: 
 --- !u!1 &204051886
 GameObject:
   m_ObjectHideFlags: 0
@@ -913,9 +1043,9 @@ MonoBehaviour:
   m_UiScaleMode: 0
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1580, y: 888}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -957,6 +1087,7 @@ GameObject:
   - component: {fileID: 296745954}
   - component: {fileID: 296745953}
   - component: {fileID: 296745952}
+  - component: {fileID: 296745955}
   m_Layer: 5
   m_Name: reset-button
   m_TagString: Untagged
@@ -1066,6 +1197,70 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 296745950}
   m_CullTransparentMesh: 1
+--- !u!114 &296745955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 296745950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7139440a8ab4954ab2e51feca83cbf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 296745952}
+  input: {fileID: 0}
+  data: 0
+  audios:
+    enterName: 
+    downName: 
+    upName: 
+  tips:
+    topLevel: 0
+    level: 0
+    delay: 0
+    itemId: 0
+    itemCount: 0
+    itemInc: 0
+    tipSprite: {fileID: 0}
+    tipTitle: 
+    tipText: 
+    corner: 0
+    offset: {x: 0, y: 0}
+    width: 0
+    type: 0
+  transitions:
+  - target: {fileID: 296745953}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  - target: {fileID: 670987138}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  highlighted: 0
+  updating: 0
+  tipTitleFormatString: 
+  tipTextFormatString: 
 --- !u!1 &318802404
 GameObject:
   m_ObjectHideFlags: 0
@@ -1931,7 +2126,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -30}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 50, y: 22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &670987138
 MonoBehaviour:
@@ -2119,6 +2314,7 @@ GameObject:
   - component: {fileID: 690067083}
   - component: {fileID: 690067082}
   - component: {fileID: 690067081}
+  - component: {fileID: 690067084}
   m_Layer: 5
   m_Name: clear-button
   m_TagString: Untagged
@@ -2228,6 +2424,70 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 690067079}
   m_CullTransparentMesh: 1
+--- !u!114 &690067084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690067079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7139440a8ab4954ab2e51feca83cbf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 0}
+  input: {fileID: 0}
+  data: 0
+  audios:
+    enterName: 
+    downName: 
+    upName: 
+  tips:
+    topLevel: 0
+    level: 0
+    delay: 0
+    itemId: 0
+    itemCount: 0
+    itemInc: 0
+    tipSprite: {fileID: 0}
+    tipTitle: 
+    tipText: 
+    corner: 0
+    offset: {x: 0, y: 0}
+    width: 0
+    type: 0
+  transitions:
+  - target: {fileID: 690067082}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  - target: {fileID: 68223895}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  highlighted: 0
+  updating: 0
+  tipTitleFormatString: 
+  tipTextFormatString: 
 --- !u!1 &739917559
 GameObject:
   m_ObjectHideFlags: 0
@@ -2240,6 +2500,7 @@ GameObject:
   - component: {fileID: 739917563}
   - component: {fileID: 739917562}
   - component: {fileID: 739917561}
+  - component: {fileID: 739917564}
   m_Layer: 5
   m_Name: slow-down-button
   m_TagString: Untagged
@@ -2349,6 +2610,70 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 739917559}
   m_CullTransparentMesh: 1
+--- !u!114 &739917564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739917559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7139440a8ab4954ab2e51feca83cbf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 0}
+  input: {fileID: 0}
+  data: 0
+  audios:
+    enterName: 
+    downName: 
+    upName: 
+  tips:
+    topLevel: 0
+    level: 0
+    delay: 0
+    itemId: 0
+    itemCount: 0
+    itemInc: 0
+    tipSprite: {fileID: 0}
+    tipTitle: 
+    tipText: 
+    corner: 0
+    offset: {x: 0, y: 0}
+    width: 0
+    type: 0
+  transitions:
+  - target: {fileID: 739917562}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  - target: {fileID: 1566880692}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  highlighted: 0
+  updating: 0
+  tipTitleFormatString: 
+  tipTextFormatString: 
 --- !u!1 &794593752
 GameObject:
   m_ObjectHideFlags: 0
@@ -2454,6 +2779,7 @@ GameObject:
   - component: {fileID: 811607108}
   - component: {fileID: 811607107}
   - component: {fileID: 811607106}
+  - component: {fileID: 811607109}
   m_Layer: 5
   m_Name: grid-button
   m_TagString: Untagged
@@ -2563,6 +2889,70 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 811607104}
   m_CullTransparentMesh: 1
+--- !u!114 &811607109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 811607104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7139440a8ab4954ab2e51feca83cbf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 811607106}
+  input: {fileID: 0}
+  data: 0
+  audios:
+    enterName: 
+    downName: 
+    upName: 
+  tips:
+    topLevel: 0
+    level: 0
+    delay: 0
+    itemId: 0
+    itemCount: 0
+    itemInc: 0
+    tipSprite: {fileID: 0}
+    tipTitle: 
+    tipText: 
+    corner: 0
+    offset: {x: 0, y: 0}
+    width: 0
+    type: 0
+  transitions:
+  - target: {fileID: 811607107}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  - target: {fileID: 338490918}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  highlighted: 0
+  updating: 0
+  tipTitleFormatString: 
+  tipTextFormatString: 
 --- !u!1 &829742942
 GameObject:
   m_ObjectHideFlags: 0
@@ -3177,7 +3567,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -30}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 50, y: 22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1015594495
 MonoBehaviour:
@@ -3794,6 +4184,7 @@ GameObject:
   - component: {fileID: 1237197037}
   - component: {fileID: 1237197036}
   - component: {fileID: 1237197035}
+  - component: {fileID: 1237197038}
   m_Layer: 5
   m_Name: speed-up-button
   m_TagString: Untagged
@@ -3903,6 +4294,70 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1237197033}
   m_CullTransparentMesh: 1
+--- !u!114 &1237197038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1237197033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7139440a8ab4954ab2e51feca83cbf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 0}
+  input: {fileID: 0}
+  data: 0
+  audios:
+    enterName: 
+    downName: 
+    upName: 
+  tips:
+    topLevel: 0
+    level: 0
+    delay: 0
+    itemId: 0
+    itemCount: 0
+    itemInc: 0
+    tipSprite: {fileID: 0}
+    tipTitle: 
+    tipText: 
+    corner: 0
+    offset: {x: 0, y: 0}
+    width: 0
+    type: 0
+  transitions:
+  - target: {fileID: 1237197036}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  - target: {fileID: 1015594495}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  highlighted: 0
+  updating: 0
+  tipTitleFormatString: 
+  tipTextFormatString: 
 --- !u!1 &1281078748
 GameObject:
   m_ObjectHideFlags: 0
@@ -3915,6 +4370,7 @@ GameObject:
   - component: {fileID: 1281078752}
   - component: {fileID: 1281078751}
   - component: {fileID: 1281078750}
+  - component: {fileID: 1281078753}
   m_Layer: 5
   m_Name: play-button
   m_TagString: Untagged
@@ -4024,6 +4480,70 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1281078748}
   m_CullTransparentMesh: 1
+--- !u!114 &1281078753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281078748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7139440a8ab4954ab2e51feca83cbf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 1281078750}
+  input: {fileID: 0}
+  data: 0
+  audios:
+    enterName: 
+    downName: 
+    upName: 
+  tips:
+    topLevel: 0
+    level: 0
+    delay: 0
+    itemId: 0
+    itemCount: 0
+    itemInc: 0
+    tipSprite: {fileID: 0}
+    tipTitle: 
+    tipText: 
+    corner: 0
+    offset: {x: 0, y: 0}
+    width: 0
+    type: 0
+  transitions:
+  - target: {fileID: 1281078751}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  - target: {fileID: 1437030601}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  highlighted: 0
+  updating: 0
+  tipTitleFormatString: 
+  tipTextFormatString: 
 --- !u!1 &1307808092
 GameObject:
   m_ObjectHideFlags: 0
@@ -4529,7 +5049,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: NaN}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1465372970
@@ -4859,7 +5379,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -30}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 50, y: 22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1566880692
 MonoBehaviour:
@@ -5148,7 +5668,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -30}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 50, y: 22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1827271869
 MonoBehaviour:
@@ -5325,6 +5845,7 @@ GameObject:
   - component: {fileID: 1870289672}
   - component: {fileID: 1870289671}
   - component: {fileID: 1870289670}
+  - component: {fileID: 1870289673}
   m_Layer: 5
   m_Name: load-button
   m_TagString: Untagged
@@ -5434,6 +5955,70 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1870289668}
   m_CullTransparentMesh: 1
+--- !u!114 &1870289673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1870289668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7139440a8ab4954ab2e51feca83cbf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 0}
+  input: {fileID: 0}
+  data: 0
+  audios:
+    enterName: 
+    downName: 
+    upName: 
+  tips:
+    topLevel: 0
+    level: 0
+    delay: 0
+    itemId: 0
+    itemCount: 0
+    itemInc: 0
+    tipSprite: {fileID: 0}
+    tipTitle: 
+    tipText: 
+    corner: 0
+    offset: {x: 0, y: 0}
+    width: 0
+    type: 0
+  transitions:
+  - target: {fileID: 1870289671}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  - target: {fileID: 84862142}
+    damp: 0.3
+    mouseoverSize: 1
+    pressedSize: 1
+    normalColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    mouseoverColor: {r: 1, g: 1, b: 1, a: 1}
+    pressedColor: {r: 1, g: 1, b: 1, a: 1}
+    disabledColor: {r: 1, g: 1, b: 1, a: 0.3}
+    alphaOnly: 0
+    highlightSizeMultiplier: 1
+    highlightColorMultiplier: 1
+    highlightAlphaMultiplier: 1
+    highlightColorOverride: {r: 0, g: 0, b: 0, a: 0}
+  highlighted: 0
+  updating: 0
+  tipTitleFormatString: 
+  tipTextFormatString: 
 --- !u!1 &1890928701
 GameObject:
   m_ObjectHideFlags: 0
@@ -5744,7 +6329,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -30}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 50, y: 22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2106539662
 MonoBehaviour:

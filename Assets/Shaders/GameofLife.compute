@@ -48,7 +48,7 @@ void CSUpdate(uint3 id : SV_DispatchThreadID)
             if (x == 0 && y == 0)
                 continue;
             
-            int2 offsetPos = centerPos + int2(x, y) + (int) resolution;
+            int2 offsetPos = centerPos + int2(x, y) + (int2) resolution;
 
             // 循环处理边界
             uint2 neighborPos = uint2(offsetPos) % resolution;

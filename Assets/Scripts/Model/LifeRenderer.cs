@@ -3,14 +3,13 @@ using UnityEngine.UI;
 
 public class LifeRenderer
 {
-    private GameData gameData;
-    private GameLogic gameLogic;
+    public GameData gameData;
+    public GameLogic gameLogic;
+    public GameObject displayImageObj;
+    public RawImage displayImage;
 
-    private RawImage displayImage;
     private Material gridMaterial;
-
     private Material paintMaterial;
-
     private Vector2 _lastFrameUV;
 
     public void Init(GameData _gameData, GameLogic _gameLogic)
@@ -18,10 +17,14 @@ public class LifeRenderer
         gameData = _gameData;
         gameLogic = _gameLogic;
 
-        displayImage = gameData.lifeData.displayImage;
+        displayImageObj = CreateDisplayObj();
+        displayImage = displayImageObj.GetComponent<RawImage>();
+
         gridMaterial = displayImage.material;
         gridMaterial.SetFloat("_ResolutionX", Configs.gameOfLifeConfig.resolutionX);
         gridMaterial.SetFloat("_ResolutionY", Configs.gameOfLifeConfig.resolutionY);
+        // Ä¬ÈÏ¹Ø±ÕÍø¸ñ
+        gridMaterial.SetFloat("_ShowGrid", 0.0f);
         paintMaterial = Material.Instantiate(Configs.gameResourcesConfig.paint);
     }
 
@@ -41,6 +44,12 @@ public class LifeRenderer
             Material.Destroy(paintMaterial);
             paintMaterial = null;
         }
+
+        if (displayImageObj != null)
+        {
+            displayImage = null;
+            GameObject.Destroy(displayImageObj);
+        }
     }
 
     public void OnUpdate()
@@ -48,6 +57,18 @@ public class LifeRenderer
         displayImage.texture = gameData.lifeData.currentTex;
 
         Paint();
+    }
+
+    private GameObject CreateDisplayObj()
+    {
+        GameObject prefab = Configs.gameResourcesConfig.displayImagePrefab;
+        Canvas canvas = UIRoot.instance.worldCanvas;
+
+        var displayImage = GameObject.Instantiate(prefab, canvas.transform, false);
+        RectTransform displayRect = displayImage.transform as RectTransform;
+        displayRect.sizeDelta = new Vector2(Configs.gameOfLifeConfig.resolutionX, Configs.gameOfLifeConfig.resolutionY);
+
+        return displayImage;
     }
 
     public void OnGridShow(bool showGrid)
