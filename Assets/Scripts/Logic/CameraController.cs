@@ -24,7 +24,7 @@ public class CameraController
 
     public void SetNew()
     {
-        _camera_position = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
+        _camera_position = new Vector2(0, 0);
         _camera_zoom = mainCamera.orthographicSize;
 
         mainCamera.transform.position = new Vector3(_camera_position.x, _camera_position.y, -10f);

@@ -4,9 +4,9 @@ Shader "GOL/Paint"
     {
         _MainTex ("Texture", 2D) = "white" {}
         _MousePos ("Mouse Position", Vector) = (0,0,0,0)
-        _BrushSize ("Brush Size", Float) = 0.01
-        _PaintColor ("Paint Color", Float) = 1.0
-        _AspectRatio ("Aspect Ratio", Float) = 1.0
+         _PaintColor ("Paint Color", Float) = 1.0
+        _ResolutionX ("ResolutionX", Float) = 256
+        _ResolutionY ("ResolutionY", Float) = 256
     }
     SubShader
     {
@@ -38,27 +38,38 @@ Shader "GOL/Paint"
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                o.uv = v.uv;
                 return o;
             }
 
             sampler2D _MainTex;
             float4 _MousePos;
-            float _BrushSize;
             float _PaintColor;
-            float _AspectRatio;
+
+            float _ResolutionX;
+            float _ResolutionY;
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv);
-                float2 diff = i.uv - _MousePos.xy;
-                diff.x *= _AspectRatio;
-                float dist = length(diff);
 
-                if (dist < _BrushSize)
+                float2 resolution =
+                    float2(_ResolutionX, _ResolutionY);
+
+                int2 mouseCell =
+                    (int2)floor(_MousePos.xy * resolution);
+
+                int2 currentCell =
+                    (int2)floor(i.uv * resolution);
+
+                if(all(mouseCell == currentCell))
                 {
-                    return fixed4(_PaintColor, _PaintColor, _PaintColor, 1);    
+                    return fixed4(
+                        _PaintColor,
+                        _PaintColor,
+                        _PaintColor,
+                        1
+                    );
                 }
 
                 return col;

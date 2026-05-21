@@ -5,8 +5,9 @@ public class LifeRenderer
 {
     public GameData gameData;
     public GameLogic gameLogic;
-    public GameObject displayImageObj;
-    public RawImage displayImage;
+    public GameObject displayObj;
+    //public RawImage displayImage;
+    public MeshRenderer displayRenderer;
 
     private Material gridMaterial;
     private Material paintMaterial;
@@ -17,22 +18,22 @@ public class LifeRenderer
         gameData = _gameData;
         gameLogic = _gameLogic;
 
-        displayImageObj = CreateDisplayObj();
-        displayImage = displayImageObj.GetComponent<RawImage>();
+        displayObj = CreateDisplayObj();
+        //displayImage = displayImageObj.GetComponent<RawImage>();
+        displayRenderer = displayObj.GetComponent<MeshRenderer>();
 
-        gridMaterial = new Material(displayImage.material);
+        //gridMaterial = new Material(displayImage.material);
+        gridMaterial = displayRenderer.material;
         gridMaterial.SetFloat("_ResolutionX", Configs.gameOfLifeConfig.resolutionX);
         gridMaterial.SetFloat("_ResolutionY", Configs.gameOfLifeConfig.resolutionY);
         // Ä¬ÈÏ¹Ø±ÕÍø¸ñ
         gridMaterial.SetFloat("_ShowGrid", 0.0f);
-        displayImage.material = gridMaterial;
+        //displayImage.material = gridMaterial;
         paintMaterial = Material.Instantiate(Configs.gameResourcesConfig.paint);
     }
 
     public void Free()
     {
-        displayImage = null;
-
         if (gridMaterial != null)
         {
             Material.Destroy(gridMaterial);
@@ -45,16 +46,22 @@ public class LifeRenderer
             paintMaterial = null;
         }
 
-        if (displayImageObj != null)
+        if (displayObj != null)
         {
-            displayImage = null;
-            GameObject.Destroy(displayImageObj);
+            // displayImage = null;
+            displayRenderer = null;
+            GameObject.Destroy(displayObj);
         }
     }
 
     public void OnUpdate()
     {
-        displayImage.texture = gameData.lifeData.currentTex;
+        //displayImage.texture = gameData.lifeData.currentTex;
+
+        if (gridMaterial != null)
+        {
+            gridMaterial.mainTexture = gameData.lifeData.currentTex;
+        }
 
         Paint();
     }
@@ -62,13 +69,24 @@ public class LifeRenderer
     private GameObject CreateDisplayObj()
     {
         GameObject prefab = Configs.gameResourcesConfig.displayImagePrefab;
-        Canvas canvas = UIRoot.instance.worldCanvas;
 
-        var displayImage = GameObject.Instantiate(prefab, canvas.transform, false);
-        RectTransform displayRect = displayImage.transform as RectTransform;
-        displayRect.sizeDelta = new Vector2(Configs.gameOfLifeConfig.resolutionX, Configs.gameOfLifeConfig.resolutionY);
+        //Canvas canvas = UIRoot.instance.worldCanvas;
+        //var displayImage = GameObject.Instantiate(prefab, canvas.transform, false);
+        //RectTransform displayRect = displayImage.transform as RectTransform;
+        //displayRect.sizeDelta = new Vector2(Configs.gameOfLifeConfig.resolutionX, Configs.gameOfLifeConfig.resolutionY);
 
-        return displayImage;
+        //return displayImage;
+
+        GameObject quadObj = GameObject.Instantiate(prefab, Vector3.zero, Quaternion.identity);
+
+        float resX = Configs.gameOfLifeConfig.resolutionX;
+        float resY = Configs.gameOfLifeConfig.resolutionY;
+
+        float scaleY = 800f;
+        float scaleX = scaleY * (resX / resY);
+        quadObj.transform.localScale = new Vector3(scaleX, scaleY, 1f);
+
+        return quadObj;
     }
 
     public void OnGridShow(bool showGrid)
@@ -78,15 +96,16 @@ public class LifeRenderer
 
     private void PaintCell(Vector2 uv, float value, float brushSize)
     {
+        Debug.Log($"Attempting to paint: Pos={uv}, ColorValue={value}");
+
         int resolutionX = (int)Configs.gameOfLifeConfig.resolutionX;
         int resolutionY = (int)Configs.gameOfLifeConfig.resolutionY;
 
         paintMaterial.SetVector("_MousePos", uv);
         paintMaterial.SetFloat("_PaintColor", value);
         paintMaterial.SetFloat("_BrushSize", brushSize);
-
-        float aspect = (float)resolutionX / resolutionY;
-        paintMaterial.SetFloat("_AspectRatio", aspect);
+        paintMaterial.SetFloat("_ResolutionX", resolutionX);
+        paintMaterial.SetFloat("_ResolutionY", resolutionY);
 
         RenderTexture temp = RenderTexture.GetTemporary(resolutionX, resolutionY, 0);
         Graphics.Blit(gameData.lifeData.currentTex, temp, paintMaterial);

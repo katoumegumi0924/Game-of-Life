@@ -59,10 +59,10 @@ public class PlayerController
             return;
         }
 
-        if (IsPointerOverBlockingUI())
-        {
-            return;
-        }
+        //if (IsPointerOverBlockingUI())
+        //{
+        //    return;
+        //}
 
         cellUV = GetUVFromMouse();
 
@@ -75,23 +75,37 @@ public class PlayerController
     // 坐标转换
     private Vector2 GetUVFromMouse()
     {
-        Vector2 localPoint;
-        var displayImage = GameMain.instance.gameModel.gameOfLifeRenderer.displayImage;
-        RectTransform rectTransform = displayImage.rectTransform;
+        //Vector2 localPoint;
+        //var displayImage = GameMain.instance.gameModel.gameOfLifeRenderer.displayImage;
+        //RectTransform rectTransform = displayImage.rectTransform;
 
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, Input.mousePosition, Camera.main, out localPoint))
+        //if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, Input.mousePosition, Camera.main, out localPoint))
+        //{
+        //    Vector2 normalizedUV = Rect.PointToNormalized(rectTransform.rect, localPoint);
+        //    Rect uvRect = displayImage.uvRect;
+        //    normalizedUV.x = normalizedUV.x * uvRect.width + uvRect.x;
+        //    normalizedUV.y = normalizedUV.y * uvRect.height + uvRect.y;
+
+        //    // 边界检查
+        //    if (normalizedUV.x >= 0 && normalizedUV.x <= 1 && normalizedUV.y >= 0 && normalizedUV.y <= 1)
+        //    {
+        //        return normalizedUV;
+        //    }
+        //}
+        //return Vector2.negativeInfinity;
+
+        var displayRenderer = GameMain.instance.gameModel.gameOfLifeRenderer.displayRenderer;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            Vector2 normalizedUV = Rect.PointToNormalized(rectTransform.rect, localPoint);
-            Rect uvRect = displayImage.uvRect;
-            normalizedUV.x = normalizedUV.x * uvRect.width + uvRect.x;
-            normalizedUV.y = normalizedUV.y * uvRect.height + uvRect.y;
-
-            // 边界检查
-            if (normalizedUV.x >= 0 && normalizedUV.x <= 1 && normalizedUV.y >= 0 && normalizedUV.y <= 1)
+            if (hit.collider.gameObject == displayRenderer.gameObject)
             {
-                return normalizedUV;
+                return hit.textureCoord;
             }
         }
+
         return Vector2.negativeInfinity;
     }
 
@@ -106,29 +120,29 @@ public class PlayerController
 
     // 射线检测 判断鼠标当前是否位于真正的UI上
     // 由于演化的RenderTexture也是在UI上，所以无法使用EventSystem.current.IsPointerOverGameObject()
-    private bool IsPointerOverBlockingUI()
-    {
-        if (_pointerEventData == null)
-        {
-            _pointerEventData = new PointerEventData(EventSystem.current);
-        }
+    //private bool IsPointerOverBlockingUI()
+    //{
+    //    if (_pointerEventData == null)
+    //    {
+    //        _pointerEventData = new PointerEventData(EventSystem.current);
+    //    }
 
-        _pointerEventData.position = Input.mousePosition;
-        _raycastResults.Clear();
+    //    _pointerEventData.position = Input.mousePosition;
+    //    _raycastResults.Clear();
 
-        var displayImage = GameMain.instance.gameModel.gameOfLifeRenderer.displayImage;
-        // 发出射线 获取所有被点中的UI元素
-        EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);
+    //    var displayImage = GameMain.instance.gameModel.gameOfLifeRenderer.displayImage;
+    //    // 发出射线 获取所有被点中的UI元素
+    //    EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);
 
-        for (int i = 0; i < _raycastResults.Count; ++i)
-        {
-            // 如果射线检测结果中存在演化UI之外的UI，说明鼠标被其他UI遮挡了
-            if (_raycastResults[i].gameObject != displayImage.gameObject)
-            {
-                return true;
-            }
-        }
+    //    for (int i = 0; i < _raycastResults.Count; ++i)
+    //    {
+    //        // 如果射线检测结果中存在演化UI之外的UI，说明鼠标被其他UI遮挡了
+    //        if (_raycastResults[i].gameObject != displayImage.gameObject)
+    //        {
+    //            return true;
+    //        }
+    //    }
 
-        return false;
-    }
+    //    return false;
+    //}
 }

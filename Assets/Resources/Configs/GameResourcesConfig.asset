@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f1c8b2b7ceb1046a97a1cfb807813b, type: 3}
   m_Name: GameResourcesConfig
   m_EditorClassIdentifier: 
-  displayImagePrefab: {fileID: 3305449581634876779, guid: b961ffa963f955f48bdb352e8da4ce68, type: 3}
+  displayImagePrefab: {fileID: 4679225267260643421, guid: 4342844d15a7a2a4085ffffb9d232b7f, type: 3}
   paint: {fileID: 2100000, guid: 11b243c4928e6d14cba3299f14b2eb4a, type: 2}
