@@ -8,6 +8,8 @@ public class GameData
     public LifeData lifeData;
     public TimeData lifeTimeData;
 
+    public GameDesc gameDesc;
+
     public void Init()
     {
         lifeData = new LifeData();
@@ -15,6 +17,8 @@ public class GameData
 
         lifeTimeData = new TimeData();
         lifeTimeData.Init();
+
+        gameDesc = Program.gameDesc;
     }
 
     public void Free()
@@ -30,6 +34,8 @@ public class GameData
             lifeTimeData.Free();
             lifeTimeData = null;
         }
+
+        gameDesc = null;
     }
 
     public void SetNew()
@@ -44,6 +50,7 @@ public class GameData
 
         lifeTimeData.Import(r);
         lifeData.Import(r);
+        gameDesc.Import(r);
     }
 
     public void Export(System.IO.BinaryWriter w)
@@ -52,5 +59,6 @@ public class GameData
 
         lifeTimeData.Export(w);
         lifeData.Export(w);
+        gameDesc.Export(w);
     }
 }

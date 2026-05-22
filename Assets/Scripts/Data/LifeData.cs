@@ -9,6 +9,8 @@ public class LifeData
     public RenderTexture texB { get; private set; }
     public bool useTexA = true;
 
+    public int currentModeIndex;
+
     private bool _showGrid;
     public bool showGrid
     {
@@ -78,6 +80,7 @@ public class LifeData
         SeedTexture(texA);
         SetInitTexture(texA);
 
+        currentModeIndex = 0;
         showGrid = false;
     }
 
@@ -85,6 +88,7 @@ public class LifeData
     {
         r.ReadInt32();
 
+        currentModeIndex = r.ReadInt32();
         showGrid = r.ReadBoolean();
         RTLoadFromBinary(r, currentTex);
     }
@@ -93,6 +97,7 @@ public class LifeData
     {
         w.Write(0);
 
+        w.Write(currentModeIndex);
         w.Write(showGrid);
         RTSaveToBinary(w, currentTex);
     }

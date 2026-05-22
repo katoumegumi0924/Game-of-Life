@@ -9,10 +9,26 @@ public class UISaveEntry : ManualBehavior
     public Button LoadButton;
     public Button deleteButton;
 
-    private string path;
+    public string path;
     public Action<string> onLoadAction;
     public Action<string> onDeleteAction;
-    private SaveEntryInfo currentEntryInfo;
+    public SaveEntryInfo currentEntryInfo;
+
+    public GameMain gameMain;
+
+    protected override bool _OnInit()
+    {
+        gameMain = data as GameMain;
+        if (gameMain == null)
+            return false;
+
+        return true;
+    }
+
+    protected override void _OnFree()
+    {
+        gameMain = null;
+    }
 
     protected override void _OnRegEvent()
     {
@@ -28,6 +44,9 @@ public class UISaveEntry : ManualBehavior
 
     private void OnLoadClick()
     {
+        UIRoot.instance.uiMainMenu._Close();
+        UIRoot.instance.uiGame._Open();
+
         GameMain.instance.gameData.lifeTimeData.Pause();
         GameSave.LoadGame(path, GameMain.instance.gameData);
 
@@ -41,7 +60,7 @@ public class UISaveEntry : ManualBehavior
             return;
 
         GameSave.DeleteSave(path);
-        UIRoot.instance.settingWindow.loadFileWindow.RefreshList();
+        UIRoot.instance.uiGame.uiSettingMenu.loadFileWindow.RefreshList();
     }
 
     // 用于为已经初始化的对象更新显示数据

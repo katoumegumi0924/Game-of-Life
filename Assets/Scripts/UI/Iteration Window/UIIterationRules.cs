@@ -5,9 +5,16 @@ using System;
 public class UIIterationRules : ManualBehavior
 {
     public Dropdown rulesDropDown;
+    public Text textDesc;
+
+    GameMain gameMain;
 
     protected override bool _OnInit()
     {
+        gameMain = data as GameMain;
+        if (gameMain == null)
+            return false;
+
         rulesDropDown.ClearOptions();
 
         var ruleSet = Configs.lifeRuleSet;
@@ -37,6 +44,19 @@ public class UIIterationRules : ManualBehavior
         rulesDropDown.onValueChanged.RemoveListener(OnDropdownValueChanged);
     }
 
+    protected override void _OnOpen()
+    {
+        var ruleSet = Configs.lifeRuleSet;
+        int index = gameMain.gameData.lifeData.currentModeIndex;
+
+        textDesc.text = ruleSet.GetLifeRule(index).Description;
+    }
+
+    protected override void _OnClose()
+    {
+        
+    }
+
     private void OnDropdownValueChanged(int index)
     {
         var ruleSet = Configs.lifeRuleSet;
@@ -44,6 +64,11 @@ public class UIIterationRules : ManualBehavior
         if (ruleSet == null || index < 0 || index >= ruleSet.GetLifeRuleCount())
             return;
 
-        GameMain.instance.gameLogic.lifeLogic.lifeRule = ruleSet.GetLifeRule(index);
+        var lifeData = gameMain.gameData.lifeData;
+        lifeData.currentModeIndex = index;
+        var lifeLogic = gameMain.gameLogic.lifeLogic;
+        lifeLogic.lifeRule = ruleSet.GetLifeRule(lifeData.currentModeIndex);
+
+        textDesc.text = ruleSet.GetLifeRule(index).Description;
     }
 }

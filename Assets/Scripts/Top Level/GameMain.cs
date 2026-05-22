@@ -14,14 +14,14 @@ public class GameMain : MonoBehaviour
 
         gameData = new GameData();
         gameData.Init();
-        gameData.SetNew();
 
         gameLogic = new GameLogic();
         gameLogic.Init(gameData);
-        gameLogic.SetNew();
 
         gameModel = new GameModel();
         gameModel.Init(gameData, gameLogic);
+
+        NewOrLoad();
     }
 
     public void Free()
@@ -47,6 +47,23 @@ public class GameMain : MonoBehaviour
         instance = null;
     }
 
+    void NewOrLoad()
+    {
+        if (string.IsNullOrEmpty(Program.loadFile))
+        {
+            gameData.SetNew();
+            gameLogic.SetNew();
+
+            UIRoot.instance.OpenGameUI(this);
+        }
+        else
+        {
+            GameSave.LoadGame(Program.loadFile, gameData);
+
+            UIRoot.instance.OpenGameUI(this);
+        }
+    }
+
     private void Update()
     {
         gameLogic.OnUpdate();
@@ -66,5 +83,7 @@ public class GameMain : MonoBehaviour
     private void OnDisable()
     {
         Free();
+
+        UIRoot.instance.CloseGameUI();
     }
 }

@@ -1,41 +1,52 @@
 using UnityEngine;
 
+/// <summary>
+/// UIRoot：
+/// </summary>
 public class UIRoot : ManualBehavior
 {
     private static UIRoot _instance;
 
     public static UIRoot instance { get { return _instance; } }
 
-    [Header("Canvases")]
-    public Canvas overlayCanvas;
-    public Canvas worldCanvas;
+    [SerializeField] public UIGame uiGame;
+    [SerializeField] public UIMainMenu uiMainMenu;
 
-    [Header("Panel")]
-    public UIIterationRules iterationRulesPanel;
-    public UISettingMenu settingWindow;
-    
     protected override void _OnCreate()
     {
         _instance = this;
-        iterationRulesPanel._Create();
-        settingWindow._Create();
+
+        uiGame._Create();
+        uiMainMenu._Create();
     }
 
     protected override void _OnDestroy()
     {
         _instance = null;
-        iterationRulesPanel._Destroy();
-        settingWindow._Destroy();
+
+        uiGame._Free();
+        uiMainMenu._Free();
     }
 
-    protected override bool _OnInit()
+    public void OpenGameUI(GameMain _gameMain)
     {
-        iterationRulesPanel._Init(null);
-        iterationRulesPanel._Open();
+        uiGame._Init(_gameMain);
+        uiGame._Open();
+    }
 
-        settingWindow._Init(null);
-        settingWindow._Open();
+    public void CloseGameUI()
+    {
+        uiGame._Close();
+    }
 
-        return true;
+    public void OpenMainMenuUI()
+    {
+        uiMainMenu._Init(null);
+        uiMainMenu._Open();
+    }
+
+    public void CloseMainMenuUI()
+    {
+        uiMainMenu._Close();
     }
 }

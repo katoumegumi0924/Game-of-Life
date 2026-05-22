@@ -35,7 +35,7 @@ public class LifeLogic
     public void OnUpdate()
     {
         accumulator += gameData.lifeTimeData.tickDelta;
-        while (accumulator > Configs.gameOfLifeConfig.singleStepTick)
+        while (accumulator >= Configs.gameOfLifeConfig.singleStepTick)
         {
             LifeUpdate();
             accumulator -= Configs.gameOfLifeConfig.singleStepTick;

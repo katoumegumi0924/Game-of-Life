@@ -49,7 +49,7 @@ public class UISaveInput : ManualBehavior
         }
 
         GameSave.SaveGame(inputName, GameMain.instance.gameData);
-        UIRoot.instance.settingWindow.loadFileWindow.RefreshList();
+        UIRoot.instance.uiGame.uiSettingMenu.loadFileWindow.RefreshList();
         _Close();
     }
 

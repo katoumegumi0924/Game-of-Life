@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class UIRunner : MonoBehaviour
 {
-    public UIRoot uiRoot;
+    public UIGame uiRoot;
 
     private void Awake()
     {

@@ -9,7 +9,6 @@ public class PlayerController
 
     public Vector2 cellUV;
     public float cellValue;
-    public float brushSize;
 
     private PointerEventData _pointerEventData;
     private List<RaycastResult> _raycastResults = new List<RaycastResult>();
@@ -28,7 +27,6 @@ public class PlayerController
     {
         cellUV = Vector2.zero;
         cellValue = 0f;
-        SetBrushSize(1);
     }
 
     public void OnUpdate()
@@ -75,23 +73,6 @@ public class PlayerController
     // 坐标转换
     private Vector2 GetUVFromMouse()
     {
-        //Vector2 localPoint;
-        //var displayImage = GameMain.instance.gameModel.gameOfLifeRenderer.displayImage;
-        //RectTransform rectTransform = displayImage.rectTransform;
-
-        //if (RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, Input.mousePosition, Camera.main, out localPoint))
-        //{
-        //    Vector2 normalizedUV = Rect.PointToNormalized(rectTransform.rect, localPoint);
-        //    Rect uvRect = displayImage.uvRect;
-        //    normalizedUV.x = normalizedUV.x * uvRect.width + uvRect.x;
-        //    normalizedUV.y = normalizedUV.y * uvRect.height + uvRect.y;
-
-        //    // 边界检查
-        //    if (normalizedUV.x >= 0 && normalizedUV.x <= 1 && normalizedUV.y >= 0 && normalizedUV.y <= 1)
-        //    {
-        //        return normalizedUV;
-        //    }
-        //}
         //return Vector2.negativeInfinity;
 
         var displayRenderer = GameMain.instance.gameModel.gameOfLifeRenderer.displayRenderer;
@@ -107,15 +88,6 @@ public class PlayerController
         }
 
         return Vector2.negativeInfinity;
-    }
-
-    // 设置笔刷大小
-    private void SetBrushSize(int size)
-    {
-        float heightResolution = Configs.gameOfLifeConfig.resolutionY;
-        float singlePixelUVSize = 1.0f / heightResolution;
-
-        brushSize = singlePixelUVSize * 0.5f * size;
     }
 
     // 射线检测 判断鼠标当前是否位于真正的UI上

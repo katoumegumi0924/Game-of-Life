@@ -38,7 +38,7 @@ public class CameraController
 
     public void UpdateCamera()
     {
-        if (UIRoot.instance.settingWindow.loadFileWindow.isHoveringLoadWindow)
+        if (UIRoot.instance.uiGame.uiSettingMenu.loadFileWindow.isHoveringLoadWindow)
         {
             return;
         }
