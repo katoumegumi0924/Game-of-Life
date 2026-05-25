@@ -7,8 +7,8 @@ public class LifeLogic
     public LifeRuleConfig lifeRule;
 
     private int updateKernel;
-    private uint resolutionX = Configs.gameOfLifeConfig.resolutionX;
-    private uint resolutionY = Configs.gameOfLifeConfig.resolutionY;
+    private uint resolutionX;
+    private uint resolutionY;
 
     private int accumulator = 0;
 
@@ -17,6 +17,9 @@ public class LifeLogic
         gameData = data;
         lifeShader = data.lifeData.lifeShader;
         updateKernel = lifeShader.FindKernel("CSUpdate");
+
+        resolutionX = gameData.gameDesc.resolutionX;
+        resolutionY = gameData.gameDesc.resolutionY;
     }
 
     public void Free()
@@ -30,6 +33,11 @@ public class LifeLogic
     {
         // 获取默认迭代规则
         lifeRule = Configs.lifeRuleSet.GetLifeRule(0);
+    }
+
+    public void AfterImport()
+    {
+        lifeRule = Configs.lifeRuleSet.GetLifeRule(gameData.lifeData.currentModeIndex);
     }
 
     public void OnUpdate()

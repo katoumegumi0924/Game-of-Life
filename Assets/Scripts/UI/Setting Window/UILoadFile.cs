@@ -9,9 +9,31 @@ public class UILoadFile : ManualBehavior, IPointerEnterHandler, IPointerExitHand
     public Transform content;
     public UISaveEntry uiSaveEntryPrefab;
 
-    private List<UISaveEntry> saveEntries = new List<UISaveEntry>();
+    private List<UISaveEntry> saveEntries;
 
     public bool isHoveringLoadWindow = false;
+
+    protected override bool _OnInit()
+    {
+        saveEntries = new List<UISaveEntry>();
+
+        return true;
+    }
+
+    protected override void _OnFree()
+    {
+        if (saveEntries != null)
+        {
+            for (int i = 0; i < saveEntries.Count; ++i)
+            {
+                saveEntries[i]._Free();
+            }
+
+            saveEntries.Clear();
+            saveEntries = null;
+        }
+        
+    }
 
     protected override void _OnOpen()
     {

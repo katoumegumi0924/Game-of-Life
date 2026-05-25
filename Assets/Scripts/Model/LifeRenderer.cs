@@ -21,8 +21,8 @@ public class LifeRenderer
         displayRenderer = displayObj.GetComponent<MeshRenderer>();
 
         gridMaterial = displayRenderer.material;
-        gridMaterial.SetFloat("_ResolutionX", Configs.gameOfLifeConfig.resolutionX);
-        gridMaterial.SetFloat("_ResolutionY", Configs.gameOfLifeConfig.resolutionY);
+        gridMaterial.SetFloat("_ResolutionX", gameData.gameDesc.resolutionX);
+        gridMaterial.SetFloat("_ResolutionY", gameData.gameDesc.resolutionY);
         // Ä¬ÈÏ¹Ø±ÕÍø¸ñ
         gridMaterial.SetFloat("_ShowGrid", 0.0f);
         paintMaterial = Material.Instantiate(Configs.gameResourcesConfig.paint);
@@ -65,8 +65,8 @@ public class LifeRenderer
 
         GameObject quadObj = GameObject.Instantiate(prefab, Vector3.zero, Quaternion.identity);
 
-        float resX = Configs.gameOfLifeConfig.resolutionX;
-        float resY = Configs.gameOfLifeConfig.resolutionY;
+        float resX = gameData.gameDesc.resolutionX;
+        float resY = gameData.gameDesc.resolutionY;
 
         float scaleY = 10f;
         float scaleX = scaleY * (resX / resY);
@@ -82,8 +82,8 @@ public class LifeRenderer
 
     private void PaintCell(Vector2 uv, float value)
     {
-        int resolutionX = (int)Configs.gameOfLifeConfig.resolutionX;
-        int resolutionY = (int)Configs.gameOfLifeConfig.resolutionY;
+        int resolutionX = (int)gameData.gameDesc.resolutionX;
+        int resolutionY = (int)gameData.gameDesc.resolutionX;
 
         paintMaterial.SetVector("_MousePos", uv);
         paintMaterial.SetFloat("_PaintColor", value);

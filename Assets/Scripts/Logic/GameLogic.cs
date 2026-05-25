@@ -63,6 +63,11 @@ public class GameLogic
         cameraController.SetNew();   
     }
 
+    public void AfterImport()
+    {
+        lifeLogic.AfterImport();
+    }
+
     public void OnUpdate()
     {
         cameraController.OnUpdate();

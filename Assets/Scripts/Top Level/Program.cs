@@ -31,11 +31,14 @@ public class Program : MonoBehaviour
 
     private void OnDisable()
     {
-        uiRoot.CloseMainMenuUI();
-        uiRoot._Close();
-        uiRoot._Free();
-        uiRoot._Destroy();
-
+        if (uiRoot != null)
+        {
+            uiRoot.CloseMainMenuUI();
+            uiRoot._Close();
+            uiRoot._Free();
+            uiRoot._Destroy();
+        }
+        
         if (gameDesc != null)
         {
             gameDesc.Free();

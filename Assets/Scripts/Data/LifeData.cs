@@ -4,9 +4,14 @@ using UnityEngine.UI;
 
 public class LifeData
 {
+    public GameData gameData;
+
     // 双缓存纹理 交替读写
     public RenderTexture texA { get; private set; }
     public RenderTexture texB { get; private set; }
+
+    //public int[] texA;
+    //public int[] texB;
     public bool useTexA = true;
 
     public int currentModeIndex;
@@ -22,30 +27,25 @@ public class LifeData
         set
         {
             _showGrid = value;
-
-            if (GameMain.instance != null && GameMain.instance.gameModel != null)
-            {
-                GameMain.instance.gameModel.gameOfLifeRenderer.OnGridShow(_showGrid);
-            }
         }
     }
 
     public RenderTexture currentTex { get { return useTexA ? texA : texB; } }
 
+    //public int[] currentTex {get { return useTexA ? texA : texB; } }
     public ComputeShader lifeShader;
 
-    private uint resolutionY = Configs.gameOfLifeConfig.resolutionY;
-    private uint resolutionX = Configs.gameOfLifeConfig.resolutionX;
+    private uint resolutionX;
+    private uint resolutionY;
 
     // 初始状态，初始化与加载存档后更新
     public RenderTexture initTex;
 
-    public void Init()
+    public void Init(GameData _gameData)
     {
-        lifeShader = Configs.gpuConfig.lifeShader;
+        gameData = _gameData;
 
-        texA = CreateRenderTexture();
-        texB = CreateRenderTexture();
+        lifeShader = Configs.gpuConfig.lifeShader;
 
         showGrid = false;
     }
@@ -77,6 +77,12 @@ public class LifeData
 
     public void SetNew()
     {
+        resolutionX = gameData.gameDesc.resolutionX;
+        resolutionY = gameData.gameDesc.resolutionY;
+
+        texA = CreateRenderTexture();
+        texB = CreateRenderTexture();
+
         SeedTexture(texA);
         SetInitTexture(texA);
 
@@ -90,6 +96,13 @@ public class LifeData
 
         currentModeIndex = r.ReadInt32();
         showGrid = r.ReadBoolean();
+
+        resolutionX = gameData.gameDesc.resolutionX;
+        resolutionY = gameData.gameDesc.resolutionY;
+
+        texA = CreateRenderTexture();
+        texB = CreateRenderTexture();
+
         RTLoadFromBinary(r, currentTex);
     }
 
@@ -161,8 +174,8 @@ public class LifeData
     // 保存预览图
     public static void SavePreviewImage(RenderTexture source, string path)
     {
-        int w = (int)(Configs.gameOfLifeConfig.resolutionX);
-        int h = (int)(Configs.gameOfLifeConfig.resolutionY);
+        int w = (int)(GameMain.instance.gameData.gameDesc.resolutionX);
+        int h = (int)(GameMain.instance.gameData.gameDesc.resolutionY);
         RenderTexture preRenderTexture = RenderTexture.GetTemporary(w, h, 0);
 
         Graphics.Blit(source, preRenderTexture);
@@ -277,7 +290,7 @@ public class LifeData
         int offsetX = (targetWidth - saveWidth) / 2;
         int offsetY = (targetHeight - saveHeight) / 2;
 
-        // 遍历每一个像素 计算位置 感觉需要优化
+        // 遍历每一个像素 计算位置
         for (int y = 0; y < saveHeight; ++y)
         {
             for (int x = 0; x < saveWidth; ++x)

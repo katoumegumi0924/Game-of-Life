@@ -14,21 +14,19 @@ public class UISaveEntry : ManualBehavior
     public Action<string> onDeleteAction;
     public SaveEntryInfo currentEntryInfo;
 
-    public GameMain gameMain;
+    //protected override bool _OnInit()
+    //{
+    //    gameMain = data as GameMain;
+    //    if (gameMain == null)
+    //        return false;
 
-    protected override bool _OnInit()
-    {
-        gameMain = data as GameMain;
-        if (gameMain == null)
-            return false;
+    //    return true;
+    //}
 
-        return true;
-    }
-
-    protected override void _OnFree()
-    {
-        gameMain = null;
-    }
+    //protected override void _OnFree()
+    //{
+    //    gameMain = null;
+    //}
 
     protected override void _OnRegEvent()
     {
@@ -47,11 +45,13 @@ public class UISaveEntry : ManualBehavior
         UIRoot.instance.uiMainMenu._Close();
         UIRoot.instance.uiGame._Open();
 
-        GameMain.instance.gameData.lifeTimeData.Pause();
-        GameSave.LoadGame(path, GameMain.instance.gameData);
+        // GameMain.instance.gameData.lifeTimeData.Pause();
+        // GameSave.LoadGame(path, GameMain.instance.gameData);
 
         // 加载存档时更新lifeData的initTex
-        GameMain.instance.gameData.lifeData.SetInitTexture(GameMain.instance.gameData.lifeData.currentTex);
+        // GameMain.instance.gameData.lifeData.SetInitTexture(GameMain.instance.gameData.lifeData.currentTex);
+        Program.loadFile = currentEntryInfo.path;
+        Program.instance.gameMain.gameObject.SetActive(true);
     }
 
     private void OnDeleteClick()
@@ -60,7 +60,8 @@ public class UISaveEntry : ManualBehavior
             return;
 
         GameSave.DeleteSave(path);
-        UIRoot.instance.uiGame.uiSettingMenu.loadFileWindow.RefreshList();
+        // UIRoot.instance.uiGame.uiSettingMenu.loadFileWindow.RefreshList();
+        UIRoot.instance.uiMainMenu.uiLoadFile.RefreshList();
     }
 
     // 用于为已经初始化的对象更新显示数据

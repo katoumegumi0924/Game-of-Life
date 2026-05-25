@@ -7,8 +7,8 @@ public class CameraController
 
     private const float ZOOM_SPEED = 0.5f;
     private const float MOVE_SPEED = 2.0f;
-    private const float MAX_ZOOM = 1000f;
-    private const float MIN_ZOOM = 0.001f;
+    private const float MAX_ZOOM = 10f;
+    private const float MIN_ZOOM = 0.1f;
 
     public Camera mainCamera;
 
