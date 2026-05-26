@@ -6,15 +6,22 @@ public class LifeData
 {
     public GameData gameData;
 
-    // 双缓存纹理 交替读写
-    public RenderTexture texA { get; private set; }
-    public RenderTexture texB { get; private set; }
-
-    //public int[] texA;
-    //public int[] texB;
+    public int[] texA;
+    public int[] texB;
     public bool useTexA = true;
+    
+    public int currentRuleIndex;
 
-    public int currentModeIndex;
+    public int resX;
+    public int resY;
+
+    public int totalPixel
+    {
+        get
+        {
+            return resX* resY;
+        }
+    }
 
     private bool _showGrid;
     public bool showGrid
@@ -30,63 +37,56 @@ public class LifeData
         }
     }
 
-    public RenderTexture currentTex { get { return useTexA ? texA : texB; } }
-
-    //public int[] currentTex {get { return useTexA ? texA : texB; } }
+    public int[] currentTex { get { return useTexA ? texA : texB; } }
     public ComputeShader lifeShader;
 
-    private uint resolutionX;
-    private uint resolutionY;
-
     // 初始状态，初始化与加载存档后更新
-    public RenderTexture initTex;
+    public int[] initTex;
 
     public void Init(GameData _gameData)
     {
         gameData = _gameData;
 
         lifeShader = Configs.gpuConfig.lifeShader;
-
-        showGrid = false;
+        
     }
 
     public void Free()
     {
         lifeShader = null;
 
-        if (texA != null)
-        {
-            texA.Release();
-            texA = null;
-        }
-
-        if (texB != null)
-        {
-            texB.Release();
-            texB = null;
-        }
-
-        if (initTex != null)
-        {
-            initTex.Release();
-            initTex = null;
-        }
+        texA = null;
+        texB = null;
+        initTex = null;
 
         showGrid = false;
     }
 
+    public void SetSize(int resX, int resY)
+    {
+        this.resX = resX;
+        this.resY = resY;
+
+        texA = new int[totalPixel];
+        texB = new int[totalPixel];
+    }
+
     public void SetNew()
     {
-        resolutionX = gameData.gameDesc.resolutionX;
-        resolutionY = gameData.gameDesc.resolutionY;
+        resX = gameData.gameDesc.resolutionX;
+        resY = gameData.gameDesc.resolutionY;
 
-        texA = CreateRenderTexture();
-        texB = CreateRenderTexture();
+        SetSize(resX, resY);
 
-        SeedTexture(texA);
-        SetInitTexture(texA);
+        //SeedTexture(texA);
+        //SetInitTexture(texA);
 
-        currentModeIndex = 0;
+        texA[0] = 1;
+        texA[1] = 1;
+        texA[2] = 1;
+        texA[3] = 1;
+
+        currentRuleIndex = 0;
         showGrid = false;
     }
 
@@ -94,25 +94,23 @@ public class LifeData
     {
         r.ReadInt32();
 
-        currentModeIndex = r.ReadInt32();
+        resX = r.ReadInt32();
+        resY = r.ReadInt32();
+
+        SetSize(resX, resY);
+
+        currentRuleIndex = r.ReadInt32();
         showGrid = r.ReadBoolean();
-
-        resolutionX = gameData.gameDesc.resolutionX;
-        resolutionY = gameData.gameDesc.resolutionY;
-
-        texA = CreateRenderTexture();
-        texB = CreateRenderTexture();
-
-        RTLoadFromBinary(r, currentTex);
     }
 
     public void Export(System.IO.BinaryWriter w)
     {
         w.Write(0);
 
-        w.Write(currentModeIndex);
+        w.Write(resX);
+        w.Write(resY);
+        w.Write(currentRuleIndex);
         w.Write(showGrid);
-        RTSaveToBinary(w, currentTex);
     }
 
     public void Swap()
@@ -122,7 +120,7 @@ public class LifeData
 
     private RenderTexture CreateRenderTexture()
     {
-        RenderTexture rt = new RenderTexture((int)resolutionX, (int)resolutionY, 0);
+        RenderTexture rt = new RenderTexture((int)resX, (int)resY, 0);
         rt.enableRandomWrite = true;
         rt.filterMode = FilterMode.Point;
         rt.wrapMode = TextureWrapMode.Repeat;
@@ -139,36 +137,32 @@ public class LifeData
         int kernel = lifeShader.FindKernel("CSInitRandom");
 
         lifeShader.SetTexture(kernel, "OutputTex", target);
-        lifeShader.SetVector("resolution", new Vector2(resolutionX, resolutionY));
+        lifeShader.SetVector("resolution", new Vector2(resX, resY));
         lifeShader.SetFloat("seed", Random.Range(0f, 10f));
 
-        int groupsX = Mathf.CeilToInt(resolutionX / 8.0f);
-        int groupsY = Mathf.CeilToInt(resolutionY / 8.0f);
+        int groupsX = Mathf.CeilToInt(resX / 8.0f);
+        int groupsY = Mathf.CeilToInt(resY / 8.0f);
         lifeShader.Dispatch(kernel, groupsX, groupsY, 1);
     }
 
     // 设置初始状态
-    public void SetInitTexture(RenderTexture source)
+    public void SetInitTexture(int[] source)
     {
         if (source == null)
             return;
 
         if (initTex == null)
         {
-            initTex = new RenderTexture(source.descriptor);
-            initTex.enableRandomWrite = true;
-            initTex.Create();
+            initTex = source;
         }
-
-        Graphics.Blit(source, initTex);
     }
 
     // 重置当前状态为初始状态
     public void ResetTexture()
     {
         useTexA = true;
-        Graphics.Blit(initTex, texA);
-        Graphics.Blit(initTex, texB);
+        texA = initTex;
+        texB = initTex;
     }
 
     // 保存预览图

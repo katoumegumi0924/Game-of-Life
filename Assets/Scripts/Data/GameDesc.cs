@@ -6,8 +6,8 @@ using UnityEngine;
 /// </summary>
 public class GameDesc
 {
-    public uint resolutionX;
-    public uint resolutionY;
+    public int resolutionX;
+    public int resolutionY;
 
     public int lifeRuleIndex;
 
@@ -40,8 +40,8 @@ public class GameDesc
     {
         r.ReadInt32();
 
-        resolutionX = r.ReadUInt32();
-        resolutionY = r.ReadUInt32();
+        resolutionX = r.ReadInt32();
+        resolutionY = r.ReadInt32();
 
         lifeRuleIndex = r.ReadInt32();
     }

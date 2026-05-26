@@ -4,8 +4,8 @@ using UnityEngine;
 public class GameOfLifeConfig : ScriptableObject
 {
     [Header("纹理分辨率")]
-    public uint resolutionY = 888;
-    public uint resolutionX= 1580;
+    public int resolutionY = 888;
+    public int resolutionX= 1580;
 
     [Header("迭代间隔Tick")]
     public int singleStepTick = 50;

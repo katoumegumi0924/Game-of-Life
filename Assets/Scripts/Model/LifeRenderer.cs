@@ -8,7 +8,7 @@ public class LifeRenderer
     public GameObject displayObj;
     public MeshRenderer displayRenderer;
 
-    private Material gridMaterial;
+    private Material sceneMaterial;
     private Material paintMaterial;
     private Vector2 _lastFrameUV;
 
@@ -20,20 +20,23 @@ public class LifeRenderer
         displayObj = CreateDisplayObj();
         displayRenderer = displayObj.GetComponent<MeshRenderer>();
 
-        gridMaterial = displayRenderer.material;
-        gridMaterial.SetFloat("_ResolutionX", gameData.gameDesc.resolutionX);
-        gridMaterial.SetFloat("_ResolutionY", gameData.gameDesc.resolutionY);
+        sceneMaterial = displayRenderer.material;
+
+        float resX = gameData.lifeData.resX;
+        float resY = gameData.lifeData.resY;
+        sceneMaterial.SetVector("_Resolution", new Vector2(resX, resY));
+
         // Ä¬ÈÏ¹Ø±ÕÍø¸ñ
-        gridMaterial.SetFloat("_ShowGrid", 0.0f);
+        // gridMaterial.SetFloat("_ShowGrid", 0.0f);
         paintMaterial = Material.Instantiate(Configs.gameResourcesConfig.paint);
     }
 
     public void Free()
     {
-        if (gridMaterial != null)
+        if (sceneMaterial != null)
         {
-            Material.Destroy(gridMaterial);
-            gridMaterial = null;
+            Material.Destroy(sceneMaterial);
+            sceneMaterial = null;
         }
 
         if (paintMaterial != null)
@@ -51,12 +54,12 @@ public class LifeRenderer
 
     public void OnUpdate()
     {
-        if (gridMaterial != null)
+        if (sceneMaterial != null)
         {
-            gridMaterial.mainTexture = gameData.lifeData.currentTex;
+            sceneMaterial.SetBuffer("_CellBuffer", gameLogic.lifeLogic.outputBuffer);
         }
 
-        Paint();
+        // Paint();
     }
 
     private GameObject CreateDisplayObj()
@@ -77,23 +80,31 @@ public class LifeRenderer
 
     public void OnGridShow(bool showGrid)
     {
-        gridMaterial.SetFloat("_ShowGrid", showGrid ? 1.0f : 0.0f);
+        sceneMaterial.SetFloat("_ShowGrid", showGrid ? 1.0f : 0.0f);
     }
 
     private void PaintCell(Vector2 uv, float value)
     {
-        int resolutionX = (int)gameData.gameDesc.resolutionX;
-        int resolutionY = (int)gameData.gameDesc.resolutionX;
+        int resX = (int)gameData.gameDesc.resolutionX;
+        int resY = (int)gameData.gameDesc.resolutionY;
+        var lifeShader = gameLogic.lifeLogic.lifeShader;
 
-        paintMaterial.SetVector("_MousePos", uv);
-        paintMaterial.SetFloat("_PaintColor", value);
-        paintMaterial.SetFloat("_ResolutionX", resolutionX);
-        paintMaterial.SetFloat("_ResolutionY", resolutionY);
+        int kernel = lifeShader.FindKernel("CSPaint");
+        lifeShader.SetVector("mouseUV", uv);
+        lifeShader.SetFloat("paintValue", value);
+        lifeShader.SetVector("resolution", new Vector2(resX, resY));
+        lifeShader.SetBuffer(kernel, "OutPut", gameLogic.lifeLogic.outputBuffer);
+        lifeShader.Dispatch(kernel, Mathf.CeilToInt(resX / 8f), Mathf.CeilToInt(resY / 8f), 1);
 
-        RenderTexture temp = RenderTexture.GetTemporary(resolutionX, resolutionY, 0);
-        Graphics.Blit(gameData.lifeData.currentTex, temp, paintMaterial);
-        Graphics.Blit(temp, gameData.lifeData.currentTex);
-        RenderTexture.ReleaseTemporary(temp);
+        //paintMaterial.SetVector("_MousePos", uv);
+        //paintMaterial.SetFloat("_PaintColor", value);
+        //paintMaterial.SetFloat("_ResolutionX", resolutionX);
+        //paintMaterial.SetFloat("_ResolutionY", resolutionY);
+
+        //RenderTexture temp = RenderTexture.GetTemporary(resolutionX, resolutionY, 0);
+        //Graphics.Blit(gameData.lifeData.currentTex, temp, paintMaterial);
+        //Graphics.Blit(temp, gameData.lifeData.currentTex);
+        //RenderTexture.ReleaseTemporary(temp);
     }
 
     private void PaintLine(Vector2 start, Vector2 end, float value)

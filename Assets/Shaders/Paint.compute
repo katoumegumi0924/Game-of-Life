@@ -1,0 +1,21 @@
+#pragma kernel CSPaint
+
+RWStructuredBuffer<int> Output;
+
+float2 mouseUV;
+float paintValue;
+uint2 resolution;
+
+[numthreads(8,8,1)]
+void CSPaint (uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= resolution.x || id.y >= resolution.y)
+        return;
+    
+    int2 targetPixel = int2(mouseUV * resolution);
+
+    if (id.x == targetPixel.x && id.y == targetPixel.y)
+    {
+        Output[id.y * resolution.x + id.x] = (int)paintValue;
+    }
+}

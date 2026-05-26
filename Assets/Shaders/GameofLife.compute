@@ -2,14 +2,12 @@
 #pragma kernel CSInitRandom
 #pragma kernel CSUpdate
 #pragma kernel CSClear
+#pragma kernel CSPaint
 
 // Create a RenderTexture with enableRandomWrite flag and set it
 // with cs.SetTexture
-
-// 上一帧画面
-Texture2D<float4> InputTex;
-// 当前帧画面
-RWTexture2D<float4> OutputTex;
+StructuredBuffer<int> Input;
+RWStructuredBuffer<int> Output;
 
 // 随机数种子
 float seed;
@@ -20,24 +18,39 @@ uint2 resolution;
 int birthMask;
 int survivalMask;
 
+// 绘制时的鼠标位置和值
+float2 mouseUV;
+float paintValue;
+
 float random(float2 uv)
 {
     return frac(sin(dot(uv, float2(12.9898, 78.233))) * 43758.5453123 + seed);
 }
 
+uint CoordToIndex(uint2 coord)
+{
+    return coord.y * resolution.x + coord.x; 
+}
+
 [numthreads(8,8,1)]
 void CSInitRandom(uint3 id : SV_DispatchThreadID)
 {
+    if (id.x >= resolution.x || id.y >= resolution.y)
+        return;
+    
     float r = random(float2(id.x, id.y));
     
-    float val = step(0.5, r);
+    int state = (r < 0.5) ? 0 : 1;
 
-    OutputTex[id.xy] = float4(val, val, val, 1.0);
+    Output[CoordToIndex(id.xy)] = state;
 }
 
 [numthreads(8,8,1)]
 void CSUpdate(uint3 id : SV_DispatchThreadID)
 {
+    if (id.x >= resolution.x || id.y >= resolution.y)
+        return;
+    
     int2 centerPos = int2(id.xy);
     uint aliveNeighbors = 0;
     // 遍历周围3x3区域，计算存活邻居数量
@@ -53,7 +66,7 @@ void CSUpdate(uint3 id : SV_DispatchThreadID)
             // 循环处理边界
             uint2 neighborPos = uint2(offsetPos) % resolution;
 
-            if (InputTex[neighborPos].r < 0.5)
+            if (Input[CoordToIndex(neighborPos)] == 0)
             {
                 aliveNeighbors++;
             }
@@ -61,15 +74,15 @@ void CSUpdate(uint3 id : SV_DispatchThreadID)
     }
 
     // 当前细胞是否存活
-    bool isAlive = InputTex[centerPos].r < 0.5;
+    bool isAlive = Input[CoordToIndex(centerPos)] == 0;
     
-    float nextState = 1.0;
+    int nextState = 1;
     if (isAlive)
     {
         // 存活
         if ((survivalMask >> aliveNeighbors) & 1)
         {
-            nextState = 0.0;
+            nextState = 0;
         }
     }
     else
@@ -77,15 +90,31 @@ void CSUpdate(uint3 id : SV_DispatchThreadID)
         // 繁殖
         if ((birthMask >> aliveNeighbors) & 1)
         {
-            nextState = 0.0;
+            nextState = 0;
         }
     }
     
-    OutputTex[centerPos] = float4(nextState, nextState, nextState, 1.0);
+    Output[CoordToIndex(centerPos)] = nextState;
 }
 
 [numthreads(8, 8, 1)]
 void CSClear(uint3 id : SV_DispatchThreadID)
 {
-    OutputTex[id.xy] = float4(1, 1, 1, 1);
+    if (id.x >= resolution.x || id.y >= resolution.y)
+        return;
+    Output[CoordToIndex(id.xy)] = 1;
+}
+
+[numthreads(8, 8, 1)]
+void CSPaint(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= resolution.x || id.y >= resolution.y)
+        return;
+    
+    uint2 targetPixel = int2(mouseUV * resolution);
+
+    if (id.x == targetPixel.x && id.y == targetPixel.y)
+    {
+        Output[CoordToIndex(id.xy)] = (int) paintValue;
+    }
 }

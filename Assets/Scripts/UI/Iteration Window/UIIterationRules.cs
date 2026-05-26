@@ -47,7 +47,7 @@ public class UIIterationRules : ManualBehavior
     protected override void _OnOpen()
     {
         var ruleSet = Configs.lifeRuleSet;
-        int index = gameMain.gameData.lifeData.currentModeIndex;
+        int index = gameMain.gameData.lifeData.currentRuleIndex;
 
         textDesc.text = ruleSet.GetLifeRule(index).Description;
     }
@@ -65,9 +65,9 @@ public class UIIterationRules : ManualBehavior
             return;
 
         var lifeData = gameMain.gameData.lifeData;
-        lifeData.currentModeIndex = index;
+        lifeData.currentRuleIndex = index;
         var lifeLogic = gameMain.gameLogic.lifeLogic;
-        lifeLogic.lifeRule = ruleSet.GetLifeRule(lifeData.currentModeIndex);
+        lifeLogic.lifeRule = ruleSet.GetLifeRule(lifeData.currentRuleIndex);
 
         textDesc.text = ruleSet.GetLifeRule(index).Description;
     }

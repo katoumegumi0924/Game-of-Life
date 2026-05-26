@@ -15,7 +15,7 @@ public static class GameSave
             {
                 gameData.Export(w);
                 // 保存同名的预览图
-                LifeData.SavePreviewImage(gameData.lifeData.currentTex, fileName);
+                // LifeData.SavePreviewImage(gameData.lifeData.currentTex, fileName);
             }
         }
     }

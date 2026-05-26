@@ -48,7 +48,7 @@ public class UINewGameSetting : ManualBehavior
         {
             if (int.TryParse(widthText, out int value))
             {
-                gameDesc.resolutionX = (uint)value;
+                gameDesc.resolutionX = value;
             }
         }
 
@@ -61,7 +61,7 @@ public class UINewGameSetting : ManualBehavior
         {
             if (int.TryParse(heightText, out int value))
             {
-                gameDesc.resolutionY = (uint)value;
+                gameDesc.resolutionY = value;
             }
         }
 
